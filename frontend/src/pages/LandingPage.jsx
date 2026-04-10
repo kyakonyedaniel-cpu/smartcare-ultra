@@ -4,7 +4,7 @@ import { Building2, Users, Calendar, Pill, BarChart, Shield, Zap, Globe } from '
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
-export function LandingPage() {
+export default function LandingPage() {
   const features = [
     { icon: Users, title: 'Patient Management', desc: 'Complete patient records with medical history' },
     { icon: Calendar, title: 'Appointments', desc: 'Smart scheduling and queue management' },

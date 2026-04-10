@@ -3,7 +3,7 @@ import { MainLayout } from '@/components/layout/MainLayout';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Pill, Package, AlertTriangle, TrendingUp } from 'lucide-react';
 
-export function PharmacyPage() {
+export default function PharmacyPage() {
   return (
     <MainLayout>
       <div className="space-y-6">

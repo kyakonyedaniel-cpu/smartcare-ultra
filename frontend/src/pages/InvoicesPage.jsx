@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Receipt, DollarSign, Clock, CheckCircle } from 'lucide-react';
 
-export function InvoicesPage() {
+export default function InvoicesPage() {
   const invoices = [
     { id: 'INV-001', patient: 'Sarah Nakato', amount: 45000, status: 'Paid', date: '2026-04-10' },
     { id: 'INV-002', patient: 'Peter Ochieng', amount: 28000, status: 'Pending', date: '2026-04-09' },

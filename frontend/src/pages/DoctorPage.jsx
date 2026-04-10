@@ -6,7 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Stethoscope, FileText, Pill } from 'lucide-react';
 
-export function DoctorPage() {
+export default function DoctorPage() {
   return (
     <MainLayout>
       <div className="space-y-6">

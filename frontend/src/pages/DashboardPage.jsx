@@ -1,7 +1,7 @@
 import React from 'react';
 import { MainLayout } from '@/components/layout/MainLayout';
 
-export function DashboardPage() {
+export default function DashboardPage() {
   return (
     <MainLayout>
       <div className="space-y-6">

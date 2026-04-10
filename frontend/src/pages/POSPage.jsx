@@ -9,7 +9,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { ShoppingCart, Plus, Minus, Trash2 } from 'lucide-react';
 import { formatCurrency } from '@/lib/utils';
 
-export function POSPage() {
+export default function POSPage() {
   const [cart, setCart] = useState([]);
   const [search, setSearch] = useState('');
   const [selectedDrug, setSelectedDrug] = useState(null);

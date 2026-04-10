@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { BarChart3, Download, TrendingUp, Users, DollarSign } from 'lucide-react';
 
-export function ReportsPage() {
+export default function ReportsPage() {
   return (
     <MainLayout>
       <div className="space-y-6">

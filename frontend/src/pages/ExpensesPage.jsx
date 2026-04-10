@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Wallet, TrendingDown, Plus } from 'lucide-react';
 
-export function ExpensesPage() {
+export default function ExpensesPage() {
   return (
     <MainLayout>
       <div className="space-y-6">

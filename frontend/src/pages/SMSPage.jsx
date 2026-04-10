@@ -8,7 +8,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { MessageSquare, Send, Clock, CheckCircle, XCircle } from 'lucide-react';
 
-export function SMSPage() {
+export default function SMSPage() {
   return (
     <MainLayout>
       <div className="space-y-6">

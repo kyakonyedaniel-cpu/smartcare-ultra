@@ -6,7 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Building2, Users, CreditCard, Bell } from 'lucide-react';
 
-export function SettingsPage() {
+export default function SettingsPage() {
   return (
     <MainLayout>
       <div className="space-y-6">

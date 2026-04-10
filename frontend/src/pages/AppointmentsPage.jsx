@@ -7,7 +7,7 @@ import { Label } from '@/components/ui/label';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Calendar, Clock, User, Plus } from 'lucide-react';
 
-export function AppointmentsPage() {
+export default function AppointmentsPage() {
   const [appointments, setAppointments] = useState([
     { id: '1', patient: 'Sarah Nakato', time: '10:00 AM', type: 'Consultation', status: 'Confirmed' },
     { id: '2', patient: 'Peter Ochieng', time: '10:30 AM', type: 'Follow-up', status: 'Scheduled' },
