@@ -49,16 +49,18 @@ export default function DoctorPage() {
           </Card>
         </div>
 
-        <Card>
-          <CardHeader>
-            <CardTitle>Recent Diagnoses</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-center py-8 text-muted-foreground">
-              Patient diagnosis and prescription interface
-            </div>
-          </CardContent>
-        </Card>
+        <div>
+          <Card>
+            <CardHeader>
+              <CardTitle>Recent Diagnoses</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="text-center py-8 text-muted-foreground">
+                Patient diagnosis and prescription interface
+              </div>
+            </CardContent>
+          </Card>
+        </div>
       </div>
     </div>
   );
