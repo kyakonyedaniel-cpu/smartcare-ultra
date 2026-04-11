@@ -3,7 +3,6 @@ import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 import prisma from '../config/database.js';
 import { authenticate } from '../middleware/auth.js';
-import { createSubscription } from '../services/subscriptionService.js';
 import { slugify } from '../utils/helpers.js';
 
 const router = express.Router();
@@ -79,7 +78,20 @@ router.post('/register', async (req, res) => {
       });
 
       if (trialPlan) {
-        await createSubscription(newTenant.id, trialPlan.id, 'MONTHLY');
+        const now = new Date();
+        const trialEndDate = new Date(now.getTime() + 14 * 24 * 60 * 60 * 1000);
+        
+        await tx.subscription.create({
+          data: {
+            tenantId: newTenant.id,
+            planId: trialPlan.id,
+            billingCycle: 'MONTHLY',
+            startDate: now,
+            endDate: trialEndDate,
+            trialEndDate: trialEndDate,
+            status: 'TRIAL'
+          }
+        });
       } else {
         // Create trial plan if it doesn't exist
         trialPlan = await tx.plan.create({
@@ -97,7 +109,21 @@ router.post('/register', async (req, res) => {
             sortOrder: 1
           }
         });
-        await createSubscription(newTenant.id, trialPlan.id, 'MONTHLY');
+        
+        const now = new Date();
+        const trialEndDate = new Date(now.getTime() + 14 * 24 * 60 * 60 * 1000);
+        
+        await tx.subscription.create({
+          data: {
+            tenantId: newTenant.id,
+            planId: trialPlan.id,
+            billingCycle: 'MONTHLY',
+            startDate: now,
+            endDate: trialEndDate,
+            trialEndDate: trialEndDate,
+            status: 'TRIAL'
+          }
+        });
       }
 
       return newTenant;
