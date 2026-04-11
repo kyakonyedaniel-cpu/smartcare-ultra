@@ -34,26 +34,26 @@ export default function ReportsPage() {
     <div className="space-y-6">
       {/* Header */}
       <div className="flex items-end justify-between">
-          <div>
-            <h1 className="text-3xl font-bold">Reports & Analytics</h1>
-            <p className="text-muted-foreground mt-1">Business insights and performance metrics</p>
-          </div>
-          <div className="flex gap-2">
-            <Select defaultValue="month">
-              <SelectTrigger className="w-32"><SelectValue /></SelectTrigger>
-              <SelectContent>
-                <SelectItem value="week">This Week</SelectItem>
-                <SelectItem value="month">This Month</SelectItem>
-                <SelectItem value="quarter">This Quarter</SelectItem>
-                <SelectItem value="year">This Year</SelectItem>
-              </SelectContent>
-            </Select>
-            <Button variant="outline"><Download size={16} className="mr-2" /> Export</Button>
-          </div>
+        <div>
+          <h1 className="text-3xl font-bold">Reports & Analytics</h1>
+          <p className="text-muted-foreground mt-1">Business insights and performance metrics</p>
         </div>
+        <div className="flex gap-2">
+          <Select defaultValue="month">
+            <SelectTrigger className="w-32"><SelectValue /></SelectTrigger>
+            <SelectContent>
+              <SelectItem value="week">This Week</SelectItem>
+              <SelectItem value="month">This Month</SelectItem>
+              <SelectItem value="quarter">This Quarter</SelectItem>
+              <SelectItem value="year">This Year</SelectItem>
+            </SelectContent>
+          </Select>
+          <Button variant="outline"><Download size={16} className="mr-2" /> Export</Button>
+        </div>
+      </div>
 
-        {/* Key Metrics */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+      {/* Key Metrics */}
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           <Card>
             <CardContent className="pt-6">
               <div className="flex items-center justify-between">
