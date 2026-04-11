@@ -94,21 +94,28 @@ router.post('/register', async (req, res) => {
         });
       } else {
         // Create trial plan if it doesn't exist
-        trialPlan = await tx.plan.create({
-          data: {
-            name: 'Trial Plan',
-            description: 'Free trial plan',
-            priceMonthly: 0,
-            priceYearly: 0,
-            maxPatients: 100,
-            maxBranches: 1,
-            maxUsers: 5,
-            maxStorageMB: 1000,
-            features: ['basic_clinic', 'basic_pharmacy'],
-            isActive: true,
-            sortOrder: 1
-          }
-        });
+        try {
+          trialPlan = await tx.plan.create({
+            data: {
+              name: `Trial Plan ${Date.now()}`, // Make name unique
+              description: 'Free trial plan',
+              priceMonthly: 0,
+              priceYearly: 0,
+              maxPatients: 100,
+              maxBranches: 1,
+              maxUsers: 5,
+              maxStorageMB: 1000,
+              features: ['basic_clinic', 'basic_pharmacy'],
+              isActive: true,
+              sortOrder: 1
+            }
+          });
+        } catch (planError) {
+          console.error('[v0] Plan creation error:', planError.message);
+          // Use existing trial plan instead
+          trialPlan = await tx.plan.findFirst({ where: { isActive: true } });
+          if (!trialPlan) throw planError;
+        }
         
         const now = new Date();
         const trialEndDate = new Date(now.getTime() + 14 * 24 * 60 * 60 * 1000);
@@ -141,8 +148,9 @@ router.post('/register', async (req, res) => {
       token
     });
   } catch (error) {
-    console.error('Registration error:', error);
-    res.status(500).json({ error: 'Registration failed' });
+    console.error('[v0] Registration error:', error.message);
+    console.error('[v0] Error details:', error);
+    res.status(500).json({ error: 'Registration failed', details: error.message });
   }
 });
 
