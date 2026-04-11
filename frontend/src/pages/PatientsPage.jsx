@@ -56,19 +56,19 @@ export default function PatientsPage() {
 
   return (
     <div className="space-y-6">
-        {/* Header */}
-        <div className="flex items-end justify-between">
-          <div>
-            <h1 className="text-3xl font-bold">Patients</h1>
-            <p className="text-muted-foreground mt-1">Manage patient records and medical history</p>
-          </div>
-          <Dialog open={showAddModal} onOpenChange={(open) => {
-            setShowAddModal(open);
-            if (!open) setSelectedPatient(null);
-          }}>
-            <DialogTrigger asChild>
-              <Button><Plus size={16} className="mr-2" /> Add Patient</Button>
-            </DialogTrigger>
+      {/* Header */}
+      <div className="flex items-end justify-between">
+        <div>
+          <h1 className="text-3xl font-bold">Patients</h1>
+          <p className="text-muted-foreground mt-1">Manage patient records and medical history</p>
+        </div>
+        <Dialog open={showAddModal} onOpenChange={(open) => {
+          setShowAddModal(open);
+          if (!open) setSelectedPatient(null);
+        }}>
+          <DialogTrigger asChild>
+            <Button><Plus size={16} className="mr-2" /> Add Patient</Button>
+          </DialogTrigger>
             <DialogContent className="max-w-lg">
               <DialogHeader>
                 <DialogTitle>{selectedPatient ? 'Edit Patient' : 'Add New Patient'}</DialogTitle>
@@ -118,20 +118,21 @@ export default function PatientsPage() {
             </DialogContent>
           </Dialog>
         </div>
+      </div>
 
-        {/* Search */}
-        <div className="relative">
-          <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-          <Input 
-            placeholder="Search by name or phone..." 
-            className="pl-10"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-          />
-        </div>
+      {/* Search */}
+      <div className="relative">
+        <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+        <Input 
+          placeholder="Search by name or phone..." 
+          className="pl-10"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+        />
+      </div>
 
-        {/* Patients Table */}
-        <Card>
+      {/* Patients Table */}
+      <Card>
           <CardHeader>
             <div className="flex items-center justify-between">
               <CardTitle>All Patients ({filteredPatients.length})</CardTitle>
