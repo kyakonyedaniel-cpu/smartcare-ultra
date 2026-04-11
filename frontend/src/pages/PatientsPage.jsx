@@ -6,7 +6,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Search, Plus, Edit, Trash2, Eye } from 'lucide-react';
+import { Search, Plus, Edit, Trash2 } from 'lucide-react';
 
 export default function PatientsPage() {
   const [patients, setPatients] = useState([
@@ -69,55 +69,54 @@ export default function PatientsPage() {
           <DialogTrigger asChild>
             <Button><Plus size={16} className="mr-2" /> Add Patient</Button>
           </DialogTrigger>
-            <DialogContent className="max-w-lg">
-              <DialogHeader>
-                <DialogTitle>{selectedPatient ? 'Edit Patient' : 'Add New Patient'}</DialogTitle>
-              </DialogHeader>
-              <form onSubmit={handleSubmit} className="space-y-4">
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label>First Name *</Label>
-                    <Input value={formData.firstName} onChange={e => setFormData({...formData, firstName: e.target.value})} placeholder="Enter first name" required />
-                  </div>
-                  <div className="space-y-2">
-                    <Label>Last Name *</Label>
-                    <Input value={formData.lastName} onChange={e => setFormData({...formData, lastName: e.target.value})} placeholder="Enter last name" required />
-                  </div>
-                </div>
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label>Gender</Label>
-                    <Select value={formData.gender} onValueChange={v => setFormData({...formData, gender: v})}>
-                      <SelectTrigger><SelectValue placeholder="Select gender" /></SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="Male">Male</SelectItem>
-                        <SelectItem value="Female">Female</SelectItem>
-                        <SelectItem value="Other">Other</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  <div className="space-y-2">
-                    <Label>Date of Birth</Label>
-                    <Input type="date" value={formData.dob} onChange={e => setFormData({...formData, dob: e.target.value})} />
-                  </div>
+          <DialogContent className="max-w-lg">
+            <DialogHeader>
+              <DialogTitle>{selectedPatient ? 'Edit Patient' : 'Add New Patient'}</DialogTitle>
+            </DialogHeader>
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label>First Name *</Label>
+                  <Input value={formData.firstName} onChange={e => setFormData({...formData, firstName: e.target.value})} placeholder="Enter first name" required />
                 </div>
                 <div className="space-y-2">
-                  <Label>Phone</Label>
-                  <Input value={formData.phone} onChange={e => setFormData({...formData, phone: e.target.value})} placeholder="+256 700 123 456" />
+                  <Label>Last Name *</Label>
+                  <Input value={formData.lastName} onChange={e => setFormData({...formData, lastName: e.target.value})} placeholder="Enter last name" required />
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label>Gender</Label>
+                  <Select value={formData.gender} onValueChange={v => setFormData({...formData, gender: v})}>
+                    <SelectTrigger><SelectValue placeholder="Select gender" /></SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="Male">Male</SelectItem>
+                      <SelectItem value="Female">Female</SelectItem>
+                      <SelectItem value="Other">Other</SelectItem>
+                    </SelectContent>
+                  </Select>
                 </div>
                 <div className="space-y-2">
-                  <Label>Email</Label>
-                  <Input type="email" value={formData.email} onChange={e => setFormData({...formData, email: e.target.value})} placeholder="patient@example.com" />
+                  <Label>Date of Birth</Label>
+                  <Input type="date" value={formData.dob} onChange={e => setFormData({...formData, dob: e.target.value})} />
                 </div>
-                <div className="space-y-2">
-                  <Label>Address</Label>
-                  <Input value={formData.address} onChange={e => setFormData({...formData, address: e.target.value})} placeholder="Street address" />
-                </div>
-                <Button type="submit" className="w-full">{selectedPatient ? 'Update Patient' : 'Add Patient'}</Button>
-              </form>
-            </DialogContent>
-          </Dialog>
-        </div>
+              </div>
+              <div className="space-y-2">
+                <Label>Phone</Label>
+                <Input value={formData.phone} onChange={e => setFormData({...formData, phone: e.target.value})} placeholder="+256 700 123 456" />
+              </div>
+              <div className="space-y-2">
+                <Label>Email</Label>
+                <Input type="email" value={formData.email} onChange={e => setFormData({...formData, email: e.target.value})} placeholder="patient@example.com" />
+              </div>
+              <div className="space-y-2">
+                <Label>Address</Label>
+                <Input value={formData.address} onChange={e => setFormData({...formData, address: e.target.value})} placeholder="Street address" />
+              </div>
+              <Button type="submit" className="w-full">{selectedPatient ? 'Update Patient' : 'Add Patient'}</Button>
+            </form>
+          </DialogContent>
+        </Dialog>
       </div>
 
       {/* Search */}
@@ -133,60 +132,59 @@ export default function PatientsPage() {
 
       {/* Patients Table */}
       <Card>
-          <CardHeader>
-            <div className="flex items-center justify-between">
-              <CardTitle>All Patients ({filteredPatients.length})</CardTitle>
-            </div>
-          </CardHeader>
-          <CardContent>
-            <div className="overflow-x-auto">
-              <Table>
-                <TableHeader>
+        <CardHeader>
+          <div className="flex items-center justify-between">
+            <CardTitle>All Patients ({filteredPatients.length})</CardTitle>
+          </div>
+        </CardHeader>
+        <CardContent>
+          <div className="overflow-x-auto">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Patient #</TableHead>
+                  <TableHead>Name</TableHead>
+                  <TableHead>Phone</TableHead>
+                  <TableHead>Gender</TableHead>
+                  <TableHead>DOB</TableHead>
+                  <TableHead>Added</TableHead>
+                  <TableHead className="text-right">Actions</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {filteredPatients.length === 0 ? (
                   <TableRow>
-                    <TableHead>Patient #</TableHead>
-                    <TableHead>Name</TableHead>
-                    <TableHead>Phone</TableHead>
-                    <TableHead>Gender</TableHead>
-                    <TableHead>DOB</TableHead>
-                    <TableHead>Added</TableHead>
-                    <TableHead className="text-right">Actions</TableHead>
+                    <TableCell colSpan={7} className="text-center py-8 text-muted-foreground">
+                      {search ? 'No patients found matching your search' : 'No patients yet. Add one to get started.'}
+                    </TableCell>
                   </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {filteredPatients.length === 0 ? (
-                    <TableRow>
-                      <TableCell colSpan={7} className="text-center py-8 text-muted-foreground">
-                        {search ? 'No patients found matching your search' : 'No patients yet. Add one to get started.'}
+                ) : (
+                  filteredPatients.map((patient) => (
+                    <TableRow key={patient.id} className="hover:bg-muted/50">
+                      <TableCell className="font-mono text-sm font-semibold">{patient.patientNumber}</TableCell>
+                      <TableCell className="font-medium">{patient.firstName} {patient.lastName}</TableCell>
+                      <TableCell>{patient.phone}</TableCell>
+                      <TableCell>{patient.gender}</TableCell>
+                      <TableCell>{patient.dob || '-'}</TableCell>
+                      <TableCell className="text-sm text-muted-foreground">{patient.createdAt.toLocaleDateString()}</TableCell>
+                      <TableCell className="text-right">
+                        <div className="flex gap-1 justify-end">
+                          <Button variant="ghost" size="sm" onClick={() => openEdit(patient)}>
+                            <Edit size={16} />
+                          </Button>
+                          <Button variant="ghost" size="sm" className="text-destructive hover:text-destructive" onClick={() => deletePatient(patient.id)}>
+                            <Trash2 size={16} />
+                          </Button>
+                        </div>
                       </TableCell>
                     </TableRow>
-                  ) : (
-                    filteredPatients.map((patient) => (
-                      <TableRow key={patient.id} className="hover:bg-muted/50">
-                        <TableCell className="font-mono text-sm font-semibold">{patient.patientNumber}</TableCell>
-                        <TableCell className="font-medium">{patient.firstName} {patient.lastName}</TableCell>
-                        <TableCell>{patient.phone}</TableCell>
-                        <TableCell>{patient.gender}</TableCell>
-                        <TableCell>{patient.dob || '-'}</TableCell>
-                        <TableCell className="text-sm text-muted-foreground">{patient.createdAt.toLocaleDateString()}</TableCell>
-                        <TableCell className="text-right">
-                          <div className="flex gap-1 justify-end">
-                            <Button variant="ghost" size="sm" onClick={() => openEdit(patient)}>
-                              <Edit size={16} />
-                            </Button>
-                            <Button variant="ghost" size="sm" className="text-destructive hover:text-destructive" onClick={() => deletePatient(patient.id)}>
-                              <Trash2 size={16} />
-                            </Button>
-                          </div>
-                        </TableCell>
-                      </TableRow>
-                    ))
-                  )}
-                </TableBody>
-              </Table>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
+                  ))
+                )}
+              </TableBody>
+            </Table>
+          </div>
+        </CardContent>
+      </Card>
     </div>
   );
 }
