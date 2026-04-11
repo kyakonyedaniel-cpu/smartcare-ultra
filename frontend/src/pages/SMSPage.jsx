@@ -10,16 +10,16 @@ import { MessageSquare, Send, Clock, CheckCircle, XCircle } from 'lucide-react';
 export default function SMSPage() {
   return (
     <div className="space-y-6">
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-3xl font-bold">SMS Center</h1>
-            <p className="text-muted-foreground">Send SMS to patients</p>
-          </div>
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-3xl font-bold">SMS Center</h1>
+          <p className="text-muted-foreground">Send SMS to patients</p>
         </div>
+      </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-          <Card>
-            <CardContent className="pt-6">
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+        <Card>
+          <CardContent className="pt-6">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-muted-foreground">Sent Today</p>
@@ -29,8 +29,8 @@ export default function SMSPage() {
               </div>
             </CardContent>
           </Card>
-          <Card>
-            <CardContent className="pt-6">
+        <Card>
+          <CardContent className="pt-6">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-muted-foreground">Delivered</p>
@@ -40,8 +40,8 @@ export default function SMSPage() {
               </div>
             </CardContent>
           </Card>
-          <Card>
-            <CardContent className="pt-6">
+        <Card>
+          <CardContent className="pt-6">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-muted-foreground">Pending</p>
@@ -51,8 +51,8 @@ export default function SMSPage() {
               </div>
             </CardContent>
           </Card>
-          <Card>
-            <CardContent className="pt-6">
+        <Card>
+          <CardContent className="pt-6">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-muted-foreground">Failed</p>
@@ -62,7 +62,6 @@ export default function SMSPage() {
               </div>
             </CardContent>
           </Card>
-        </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <Card>
