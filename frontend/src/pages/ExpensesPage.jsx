@@ -68,99 +68,125 @@ export default function ExpensesPage() {
     <div className="space-y-6">
       {/* Header */}
       <div className="flex items-end justify-between">
-          <div>
-            <h1 className="text-3xl font-bold">Expenses</h1>
-            <p className="text-muted-foreground mt-1">Track and manage business expenses</p>
+        <div>
+          <h1 className="text-3xl font-bold">Expenses</h1>
+          <p className="text-muted-foreground mt-1">Track and manage business expenses</p>
+        </div>
+        <Dialog open={showModal} onOpenChange={setShowModal}>
+          <DialogTrigger asChild>
+            <Button><Plus size={16} className="mr-2" /> Add Expense</Button>
+          </DialogTrigger>
+          <DialogContent className="max-w-lg">
+            <DialogHeader>
+              <DialogTitle>Record New Expense</DialogTitle>
+            </DialogHeader>
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div className="space-y-2">
+                <Label>Description *</Label>
+                <Input value={formData.description} onChange={(e) => setFormData({...formData, description: e.target.value})} placeholder="e.g., Medical Supplies" required />
+              </div>
+              <div className="space-y-2">
+                <Label>Category *</Label>
+                <Select value={formData.category} onValueChange={(value) => setFormData({...formData, category: value})}>
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="Payroll">Payroll</SelectItem>
+                    <SelectItem value="Facility">Facility</SelectItem>
+                    <SelectItem value="Supplies">Supplies</SelectItem>
+                    <SelectItem value="Utilities">Utilities</SelectItem>
+                    <SelectItem value="Other">Other</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="space-y-2">
+                <Label>Amount (UGX) *</Label>
+                <Input type="number" value={formData.amount} onChange={(e) => setFormData({...formData, amount: parseFloat(e.target.value)})} placeholder="0" required />
+              </div>
+              <div className="space-y-2">
+                <Label>Date *</Label>
+                <Input type="date" value={formData.date} onChange={(e) => setFormData({...formData, date: e.target.value})} required />
+              </div>
+              <Button type="submit" className="w-full">Record Expense</Button>
+            </form>
+          </DialogContent>
+        </Dialog>
+      </div>
+
+      {/* Expenses Summary */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <Card>
+          <CardContent className="pt-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-muted-foreground">Today</p>
+                <p className="text-3xl font-bold">UGX {(todayExpenses / 1000).toFixed(0)}K</p>
+              </div>
+              <Wallet className="w-12 h-12 text-red-500 opacity-20" />
+            </div>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent className="pt-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-muted-foreground">This Week</p>
+                <p className="text-3xl font-bold">UGX {(weekExpenses / 1000).toFixed(0)}K</p>
+              </div>
+              <TrendingDown className="w-12 h-12 text-orange-500 opacity-20" />
+            </div>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent className="pt-6">
+            <div>
+              <p className="text-sm text-muted-foreground">This Month</p>
+              <p className="text-3xl font-bold">UGX {(currentMonthExpenses / 1000).toFixed(0)}K</p>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Expenses Table */}
+      <Card>
+        <CardHeader>
+          <CardTitle>All Expenses</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="overflow-x-auto">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Description</TableHead>
+                  <TableHead>Category</TableHead>
+                  <TableHead>Amount</TableHead>
+                  <TableHead>Date</TableHead>
+                  <TableHead>Action</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {expenses.map((expense) => (
+                  <TableRow key={expense.id}>
+                    <TableCell className="font-medium">{expense.description}</TableCell>
+                    <TableCell>{expense.category}</TableCell>
+                    <TableCell>UGX {expense.amount.toLocaleString()}</TableCell>
+                    <TableCell>{new Date(expense.date).toLocaleDateString()}</TableCell>
+                    <TableCell>
+                      <Button variant="ghost" size="sm" onClick={() => deleteExpense(expense.id)}>
+                        <Trash2 size={16} />
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
           </div>
-          <Dialog open={showModal} onOpenChange={setShowModal}>
-            <DialogTrigger asChild>
-              <Button><Plus size={16} className="mr-2" /> Add Expense</Button>
-            </DialogTrigger>
-            <DialogContent className="max-w-lg">
-              <DialogHeader>
-                <DialogTitle>Record New Expense</DialogTitle>
-              </DialogHeader>
-              <form onSubmit={handleSubmit} className="space-y-4">
-                <div className="space-y-2">
-                  <Label>Description *</Label>
-                  <Input value={formData.description} onChange={e => setFormData({...formData, description: e.target.value})} placeholder="e.g., Staff salaries" required />
-                </div>
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label>Category *</Label>
-                    <Select value={formData.category} onValueChange={v => setFormData({...formData, category: v})}>
-                      <SelectTrigger><SelectValue placeholder="Select category" /></SelectTrigger>
-                      <SelectContent>
-                        {categories.map(cat => (
-                          <SelectItem key={cat} value={cat}>{cat}</SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  <div className="space-y-2">
-                    <Label>Amount *</Label>
-                    <Input type="number" value={formData.amount} onChange={e => setFormData({...formData, amount: e.target.value})} placeholder="Amount in UGX" required />
-                  </div>
-                </div>
-                <div className="space-y-2">
-                  <Label>Date *</Label>
-                  <Input type="date" value={formData.date} onChange={e => setFormData({...formData, date: e.target.value})} required />
-                </div>
-                <Button type="submit" className="w-full">Add Expense</Button>
-              </form>
-            </DialogContent>
-          </Dialog>
-        </div>
-
-        {/* Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <Card>
-            <CardContent className="pt-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-muted-foreground">This Month</p>
-                  <p className="text-3xl font-bold">UGX {(currentMonthExpenses / 1000).toFixed(0)}K</p>
-                </div>
-                <Wallet className="h-8 w-8 text-primary" />
-              </div>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardContent className="pt-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-muted-foreground">Last Month</p>
-                  <p className="text-3xl font-bold">UGX {(lastMonthExpenses / 1000).toFixed(0)}K</p>
-                </div>
-                <TrendingDown className="h-8 w-8 text-red-600" />
-              </div>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardContent className="pt-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-muted-foreground">Total Expenses</p>
-                  <p className="text-3xl font-bold">{expenses.length}</p>
-                </div>
-                <TrendingDown className="h-8 w-8 text-amber-600" />
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-
-        {/* Search */}
-        <div className="relative">
-          <Input 
-            placeholder="Search expenses..." 
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-          />
-        </div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Expenses Table */}
-          <div className="lg:col-span-2">
+        </CardContent>
+      </Card>
+    </div>
+  );
+}
             <Card>
               <CardHeader>
                 <CardTitle>All Expenses</CardTitle>
