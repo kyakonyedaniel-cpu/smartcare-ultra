@@ -1,5 +1,4 @@
 import React from 'react';
-import { MainLayout } from '@/components/layout/MainLayout';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -32,8 +31,7 @@ export default function ReportsPage() {
   const maxRevenue = Math.max(...reportData.revenue.map(r => r.value));
 
   return (
-    <MainLayout>
-      <div className="space-y-6">
+    <div className="space-y-6">
         {/* Header */}
         <div className="flex items-end justify-between">
           <div>
@@ -231,6 +229,6 @@ export default function ReportsPage() {
           </CardContent>
         </Card>
       </div>
-    </MainLayout>
+    </div>
   );
 }

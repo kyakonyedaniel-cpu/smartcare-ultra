@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Toaster } from '@/components/ui/toaster';
 import { useAuthStore } from '@/store';
+import { MainLayout } from '@/components/layout/MainLayout';
 
 import LandingPage from '@/pages/LandingPage';
 import LoginPage from '@/pages/LoginPage';
@@ -34,17 +35,27 @@ function App() {
           <Route path="/" element={<LandingPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
-          <Route path="/dashboard" element={<PrivateRoute><DashboardPage /></PrivateRoute>} />
-          <Route path="/patients" element={<PrivateRoute><PatientsPage /></PrivateRoute>} />
-          <Route path="/doctor" element={<PrivateRoute><DoctorPage /></PrivateRoute>} />
-          <Route path="/pharmacy" element={<PrivateRoute><PharmacyPage /></PrivateRoute>} />
-          <Route path="/pos" element={<PrivateRoute><POSPage /></PrivateRoute>} />
-          <Route path="/appointments" element={<PrivateRoute><AppointmentsPage /></PrivateRoute>} />
-          <Route path="/invoices" element={<PrivateRoute><InvoicesPage /></PrivateRoute>} />
-          <Route path="/expenses" element={<PrivateRoute><ExpensesPage /></PrivateRoute>} />
-          <Route path="/reports" element={<PrivateRoute><ReportsPage /></PrivateRoute>} />
-          <Route path="/sms" element={<PrivateRoute><SMSPage /></PrivateRoute>} />
-          <Route path="/settings" element={<PrivateRoute><SettingsPage /></PrivateRoute>} />
+          
+          {/* Protected routes with MainLayout */}
+          <Route
+            element={
+              <PrivateRoute>
+                <MainLayout />
+              </PrivateRoute>
+            }
+          >
+            <Route path="/dashboard" element={<DashboardPage />} />
+            <Route path="/patients" element={<PatientsPage />} />
+            <Route path="/doctor" element={<DoctorPage />} />
+            <Route path="/pharmacy" element={<PharmacyPage />} />
+            <Route path="/pos" element={<POSPage />} />
+            <Route path="/appointments" element={<AppointmentsPage />} />
+            <Route path="/invoices" element={<InvoicesPage />} />
+            <Route path="/expenses" element={<ExpensesPage />} />
+            <Route path="/reports" element={<ReportsPage />} />
+            <Route path="/sms" element={<SMSPage />} />
+            <Route path="/settings" element={<SettingsPage />} />
+          </Route>
         </Routes>
       </BrowserRouter>
       <Toaster />

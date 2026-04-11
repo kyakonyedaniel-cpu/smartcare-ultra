@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { MainLayout } from '@/components/layout/MainLayout';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -66,8 +65,7 @@ export default function ExpensesPage() {
   })).filter(e => e.amount > 0);
 
   return (
-    <MainLayout>
-      <div className="space-y-6">
+    <div className="space-y-6">
         {/* Header */}
         <div className="flex items-end justify-between">
           <div>
@@ -238,6 +236,6 @@ export default function ExpensesPage() {
           </div>
         </div>
       </div>
-    </MainLayout>
+    </div>
   );
 }

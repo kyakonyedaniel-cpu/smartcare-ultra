@@ -1,5 +1,4 @@
 import React from 'react';
-import { MainLayout } from '@/components/layout/MainLayout';
 import { TrendingUp, Users, Calendar, AlertCircle, DollarSign, Pill, Clock, CheckCircle } from 'lucide-react';
 
 export default function DashboardPage() {
@@ -43,8 +42,7 @@ export default function DashboardPage() {
   ];
 
   return (
-    <MainLayout>
-      <div className="space-y-8">
+    <div className="space-y-8">
         {/* Header */}
         <div className="flex items-end justify-between">
           <div>
@@ -187,6 +185,6 @@ export default function DashboardPage() {
           </div>
         </div>
       </div>
-    </MainLayout>
+    </div>
   );
 }
