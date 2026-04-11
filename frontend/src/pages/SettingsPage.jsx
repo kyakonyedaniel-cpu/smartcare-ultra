@@ -67,9 +67,10 @@ export default function SettingsPage() {
               </Card>
             );
           })}
-        </div>
+      </div>
 
-        {/* Clinic Information Tab */}
+      {/* Settings Content */}
+      <div className="space-y-6">
         {activeTab === 'clinic' && (
           <Card>
             <CardHeader>
