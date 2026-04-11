@@ -46,11 +46,11 @@ export default function SettingsPage() {
     <div className="space-y-6">
       {/* Header */}
       <div>
-          <h1 className="text-3xl font-bold">Settings</h1>
-          <p className="text-muted-foreground mt-1">Manage your clinic and system settings</p>
-        </div>
+        <h1 className="text-3xl font-bold">Settings</h1>
+        <p className="text-muted-foreground mt-1">Manage your clinic and system settings</p>
+      </div>
 
-        {/* Settings Navigation */}
+      {/* Settings Navigation */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           {settingsSections.map((section) => {
             const Icon = section.icon;
