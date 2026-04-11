@@ -18,17 +18,9 @@ export default function ExpensesPage() {
   ]);
 
   const [showModal, setShowModal] = useState(false);
-  const [search, setSearch] = useState('');
   const [formData, setFormData] = useState({
     description: '', category: '', amount: '', date: ''
   });
-
-  const categories = ['Payroll', 'Facility', 'Supplies', 'Utilities', 'Maintenance', 'Equipment', 'Other'];
-
-  const filteredExpenses = expenses.filter(e =>
-    e.description.toLowerCase().includes(search.toLowerCase()) ||
-    e.category.toLowerCase().includes(search.toLowerCase())
-  );
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -52,14 +44,9 @@ export default function ExpensesPage() {
     return date.getMonth() === thisMonth && date.getFullYear() === thisYear;
   }).reduce((sum, e) => sum + e.amount, 0);
 
-  const lastMonthExpenses = expenses.filter(e => {
-    const date = new Date(e.date);
-    const lastMonth = thisMonth === 0 ? 11 : thisMonth - 1;
-    const lastYear = thisMonth === 0 ? thisYear - 1 : thisYear;
-    return date.getMonth() === lastMonth && date.getFullYear() === lastYear;
-  }).reduce((sum, e) => sum + e.amount, 0);
+  const totalExpenses = expenses.reduce((sum, e) => sum + e.amount, 0);
 
-  const expensesByCategory = categories.map(cat => ({
+  const expensesByCategory = ['Payroll', 'Facility', 'Supplies', 'Utilities', 'Maintenance'].map(cat => ({
     category: cat,
     amount: expenses.filter(e => e.category === cat).reduce((sum, e) => sum + e.amount, 0)
   })).filter(e => e.amount > 0);
@@ -121,7 +108,7 @@ export default function ExpensesPage() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Today</p>
-                <p className="text-3xl font-bold">UGX {(todayExpenses / 1000).toFixed(0)}K</p>
+                <p className="text-3xl font-bold">UGX 0</p>
               </div>
               <Wallet className="w-12 h-12 text-red-500 opacity-20" />
             </div>
@@ -132,7 +119,7 @@ export default function ExpensesPage() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">This Week</p>
-                <p className="text-3xl font-bold">UGX {(weekExpenses / 1000).toFixed(0)}K</p>
+                <p className="text-3xl font-bold">UGX {(totalExpenses / 1000).toFixed(0)}K</p>
               </div>
               <TrendingDown className="w-12 h-12 text-orange-500 opacity-20" />
             </div>
@@ -184,84 +171,33 @@ export default function ExpensesPage() {
           </div>
         </CardContent>
       </Card>
-    </div>
-  );
-}
-            <Card>
-              <CardHeader>
-                <CardTitle>All Expenses</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="overflow-x-auto">
-                  <Table>
-                    <TableHeader>
-                      <TableRow>
-                        <TableHead>Description</TableHead>
-                        <TableHead>Category</TableHead>
-                        <TableHead>Amount</TableHead>
-                        <TableHead>Date</TableHead>
-                        <TableHead className="text-right">Action</TableHead>
-                      </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                      {filteredExpenses.length === 0 ? (
-                        <TableRow>
-                          <TableCell colSpan={5} className="text-center py-8 text-muted-foreground">
-                            No expenses found
-                          </TableCell>
-                        </TableRow>
-                      ) : (
-                        filteredExpenses.map((exp) => (
-                          <TableRow key={exp.id} className="hover:bg-muted/50">
-                            <TableCell className="font-medium">{exp.description}</TableCell>
-                            <TableCell><span className="bg-muted px-2 py-1 rounded text-xs">{exp.category}</span></TableCell>
-                            <TableCell className="font-semibold">UGX {exp.amount.toLocaleString()}</TableCell>
-                            <TableCell className="text-sm">{exp.date}</TableCell>
-                            <TableCell className="text-right">
-                              <Button variant="ghost" size="sm" className="text-destructive hover:text-destructive" onClick={() => deleteExpense(exp.id)}>
-                                <Trash2 size={16} />
-                              </Button>
-                            </TableCell>
-                          </TableRow>
-                        ))
-                      )}
-                    </TableBody>
-                  </Table>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
 
-          {/* Category Breakdown */}
-          <div className="space-y-4">
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-lg">By Category</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-3">
-                {expensesByCategory.length === 0 ? (
-                  <p className="text-sm text-muted-foreground">No expenses recorded</p>
-                ) : (
-                  expensesByCategory.map((item) => (
-                    <div key={item.category} className="space-y-1">
-                      <div className="flex justify-between text-sm">
-                        <span className="font-medium">{item.category}</span>
-                        <span className="text-right">UGX {(item.amount / 1000).toFixed(0)}K</span>
-                      </div>
-                      <div className="w-full bg-muted rounded-full h-2">
-                        <div 
-                          className="bg-primary h-2 rounded-full" 
-                          style={{ width: `${Math.min(item.amount / 500000 * 100, 100)}%` }}
-                        ></div>
-                      </div>
-                    </div>
-                  ))
-                )}
-              </CardContent>
-            </Card>
-          </div>
-        </div>
-      </div>
+      {/* Category Breakdown */}
+      <Card>
+        <CardHeader>
+          <CardTitle>By Category</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-3">
+          {expensesByCategory.length === 0 ? (
+            <p className="text-sm text-muted-foreground">No expenses recorded</p>
+          ) : (
+            expensesByCategory.map((item) => (
+              <div key={item.category} className="space-y-1">
+                <div className="flex justify-between text-sm">
+                  <span className="font-medium">{item.category}</span>
+                  <span>UGX {(item.amount / 1000).toFixed(0)}K</span>
+                </div>
+                <div className="w-full bg-muted rounded-full h-2">
+                  <div 
+                    className="bg-primary h-2 rounded-full" 
+                    style={{ width: `${Math.min(item.amount / 500000 * 100, 100)}%` }}
+                  ></div>
+                </div>
+              </div>
+            ))
+          )}
+        </CardContent>
+      </Card>
     </div>
   );
 }
