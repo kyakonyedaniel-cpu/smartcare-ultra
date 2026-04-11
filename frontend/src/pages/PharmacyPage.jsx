@@ -55,8 +55,8 @@ export default function PharmacyPage() {
 
   return (
     <div className="space-y-6">
-        {/* Header */}
-        <div className="flex items-end justify-between">
+      {/* Header */}
+      <div className="flex items-end justify-between">
           <div>
             <h1 className="text-3xl font-bold">Pharmacy</h1>
             <p className="text-muted-foreground mt-1">Manage inventory and drug stock</p>

@@ -66,8 +66,8 @@ export default function ExpensesPage() {
 
   return (
     <div className="space-y-6">
-        {/* Header */}
-        <div className="flex items-end justify-between">
+      {/* Header */}
+      <div className="flex items-end justify-between">
           <div>
             <h1 className="text-3xl font-bold">Expenses</h1>
             <p className="text-muted-foreground mt-1">Track and manage business expenses</p>
