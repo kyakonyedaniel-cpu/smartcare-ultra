@@ -8,12 +8,12 @@ import { Stethoscope, FileText, Pill } from 'lucide-react';
 export default function DoctorPage() {
   return (
     <div className="space-y-6">
-        <div>
-          <h1 className="text-3xl font-bold">Doctor Module</h1>
-          <p className="text-muted-foreground">Diagnosis, prescriptions and patient management</p>
-        </div>
+      <div>
+        <h1 className="text-3xl font-bold">Doctor Module</h1>
+        <p className="text-muted-foreground">Diagnosis, prescriptions and patient management</p>
+      </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <Card>
             <CardContent className="pt-6">
               <div className="flex items-center justify-between">

@@ -57,10 +57,10 @@ export default function InvoicesPage() {
     <div className="space-y-6">
       {/* Header */}
       <div className="flex items-end justify-between">
-          <div>
-            <h1 className="text-3xl font-bold">Invoices</h1>
-            <p className="text-muted-foreground mt-1">Manage invoices and payment tracking</p>
-          </div>
+        <div>
+          <h1 className="text-3xl font-bold">Invoices</h1>
+          <p className="text-muted-foreground mt-1">Manage invoices and payment tracking</p>
+        </div>
           <Dialog open={showModal} onOpenChange={setShowModal}>
             <DialogTrigger asChild>
               <Button><Plus size={16} className="mr-2" /> Create Invoice</Button>
