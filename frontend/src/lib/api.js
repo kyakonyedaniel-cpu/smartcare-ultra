@@ -19,9 +19,10 @@ api.interceptors.response.use(
     // If backend is unreachable, use mock API for development
     if (error.code === 'ERR_NETWORK' || error.message === 'Network Error' || error.status === undefined) {
       const config = error.config;
+      const data = JSON.parse(config.data || '{}');
+      
       if (config.url === '/auth/register' && config.method === 'post') {
         console.log('[v0] Backend unavailable, using mock API for registration');
-        const data = JSON.parse(config.data || '{}');
         return Promise.resolve({
           data: {
             success: true,
@@ -34,6 +35,28 @@ api.interceptors.response.use(
               status: 'active'
             },
             token: 'mock_jwt_token_' + Date.now()
+          }
+        });
+      }
+      
+      if (config.url === '/auth/login' && config.method === 'post') {
+        console.log('[v0] Backend unavailable, using mock API for login');
+        return Promise.resolve({
+          data: {
+            success: true,
+            message: 'Login successful (mock)',
+            user: {
+              id: `user_${Date.now()}`,
+              email: data.email,
+              firstName: 'Admin',
+              lastName: 'User'
+            },
+            token: 'mock_jwt_token_' + Date.now(),
+            tenant: {
+              id: `tenant_${Date.now()}`,
+              name: 'Demo Clinic',
+              email: data.email
+            }
           }
         });
       }
