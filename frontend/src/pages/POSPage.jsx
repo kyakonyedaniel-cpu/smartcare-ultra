@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { MainLayout } from '@/components/layout/MainLayout';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -52,8 +51,7 @@ export default function POSPage() {
   const total = subtotal + tax;
 
   return (
-    <MainLayout>
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2 space-y-6">
           <Card>
             <CardHeader>
@@ -188,6 +186,6 @@ export default function POSPage() {
           </Card>
         </div>
       </div>
-    </MainLayout>
+    </div>
   );
 }

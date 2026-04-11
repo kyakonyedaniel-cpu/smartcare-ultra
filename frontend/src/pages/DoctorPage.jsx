@@ -1,5 +1,4 @@
 import React from 'react';
-import { MainLayout } from '@/components/layout/MainLayout';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -8,8 +7,7 @@ import { Stethoscope, FileText, Pill } from 'lucide-react';
 
 export default function DoctorPage() {
   return (
-    <MainLayout>
-      <div className="space-y-6">
+    <div className="space-y-6">
         <div>
           <h1 className="text-3xl font-bold">Doctor Module</h1>
           <p className="text-muted-foreground">Diagnosis, prescriptions and patient management</p>
@@ -62,6 +60,6 @@ export default function DoctorPage() {
           </CardContent>
         </Card>
       </div>
-    </MainLayout>
+    </div>
   );
 }

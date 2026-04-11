@@ -1,5 +1,4 @@
 import React from 'react';
-import { MainLayout } from '@/components/layout/MainLayout';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -10,8 +9,7 @@ import { MessageSquare, Send, Clock, CheckCircle, XCircle } from 'lucide-react';
 
 export default function SMSPage() {
   return (
-    <MainLayout>
-      <div className="space-y-6">
+    <div className="space-y-6">
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-3xl font-bold">SMS Center</h1>
@@ -122,6 +120,6 @@ export default function SMSPage() {
           </Card>
         </div>
       </div>
-    </MainLayout>
+    </div>
   );
 }
