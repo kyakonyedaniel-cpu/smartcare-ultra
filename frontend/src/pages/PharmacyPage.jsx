@@ -105,9 +105,10 @@ export default function PharmacyPage() {
             </DialogContent>
           </Dialog>
         </div>
+      </div>
 
       {/* Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           <Card>
             <CardContent className="pt-6">
               <div className="flex items-center justify-between">
@@ -152,10 +153,10 @@ export default function PharmacyPage() {
               </div>
             </CardContent>
           </Card>
-        </div>
+      </div>
 
-        {/* Search */}
-        <div className="relative">
+      {/* Search */}
+      <div className="relative">
           <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
           <Input 
             placeholder="Search by drug name or category..." 
@@ -163,10 +164,10 @@ export default function PharmacyPage() {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
-        </div>
+      </div>
 
-        {/* Drugs Table */}
-        <Card>
+      {/* Drugs Table */}
+      <Card>
           <CardHeader>
             <CardTitle>Drug Inventory ({filteredDrugs.length})</CardTitle>
           </CardHeader>
@@ -224,8 +225,7 @@ export default function PharmacyPage() {
               </Table>
             </div>
           </CardContent>
-        </Card>
-      </div>
+      </Card>
     </div>
   );
 }
