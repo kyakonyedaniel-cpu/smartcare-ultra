@@ -22,7 +22,7 @@ router.post('/register', async (req, res) => {
     }
 
     const slug = slugify(clinicName);
-    const trialPlan = await prisma.plan.findFirst({ 
+    let trialPlan = await prisma.plan.findFirst({ 
       where: { name: { contains: 'Trial', mode: 'insensitive' } }
     });
 
@@ -48,7 +48,20 @@ router.post('/register', async (req, res) => {
         }
       });
 
-      const ownerRole = await tx.role.findUnique({ where: { type: 'OWNER' } });
+      let ownerRole = await tx.role.findUnique({ where: { type: 'OWNER' } });
+      
+      // Create OWNER role if it doesn't exist
+      if (!ownerRole) {
+        ownerRole = await tx.role.create({
+          data: {
+            name: 'Owner',
+            type: 'OWNER',
+            description: 'Clinic owner with full access',
+            isDefault: true,
+            permissions: []
+          }
+        });
+      }
       
       const hashedPassword = await bcrypt.hash(password, 10);
       await tx.user.create({
@@ -66,6 +79,24 @@ router.post('/register', async (req, res) => {
       });
 
       if (trialPlan) {
+        await createSubscription(newTenant.id, trialPlan.id, 'MONTHLY');
+      } else {
+        // Create trial plan if it doesn't exist
+        trialPlan = await tx.plan.create({
+          data: {
+            name: 'Trial Plan',
+            description: 'Free trial plan',
+            priceMonthly: 0,
+            priceYearly: 0,
+            maxPatients: 100,
+            maxBranches: 1,
+            maxUsers: 5,
+            maxStorageMB: 1000,
+            features: ['basic_clinic', 'basic_pharmacy'],
+            isActive: true,
+            sortOrder: 1
+          }
+        });
         await createSubscription(newTenant.id, trialPlan.id, 'MONTHLY');
       }
 
