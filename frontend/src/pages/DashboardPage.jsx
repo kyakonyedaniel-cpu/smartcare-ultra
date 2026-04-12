@@ -2,8 +2,6 @@ import React from 'react';
 import { MainLayout } from '@/components/layout/MainLayout';
 import { StatCard } from '@/components/dashboard/StatCard';
 import { QuickActions } from '@/components/dashboard/QuickActions';
-import { SmartInsights } from '@/components/dashboard/SmartInsights';
-import { RevenueChart } from '@/components/dashboard/RevenueChart';
 import { DollarSign, Users, Calendar, AlertCircle } from 'lucide-react';
 
 export default function DashboardPage() {
@@ -51,13 +49,6 @@ export default function DashboardPage() {
         </div>
 
         <QuickActions />
-
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-          <div className="lg:col-span-2">
-            <RevenueChart />
-          </div>
-          <SmartInsights />
-        </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
           <div className="bg-card rounded-lg border p-5">
