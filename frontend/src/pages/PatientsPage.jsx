@@ -8,7 +8,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Search, Plus, UserCheck } from 'lucide-react';
+import { Search, Plus } from 'lucide-react';
 
 export default function PatientsPage() {
   const [patients, setPatients] = useState([]);
@@ -102,17 +102,15 @@ export default function PatientsPage() {
           </Dialog>
         </div>
 
-        <div className="flex gap-4">
-          <div className="relative flex-1">
-            <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-            <Input 
-              placeholder="Search patients..." 
-              className="pl-10"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              onKeyDown={(e) => e.key === 'Enter' && loadPatients()}
-            />
-          </div>
+        <div className="relative">
+          <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+          <Input 
+            placeholder="Search patients..." 
+            className="pl-10"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            onKeyDown={(e) => e.key === 'Enter' && loadPatients()}
+          />
         </div>
 
         <Card>
@@ -120,34 +118,36 @@ export default function PatientsPage() {
             <CardTitle>All Patients</CardTitle>
           </CardHeader>
           <CardContent>
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Patient #</TableHead>
-                  <TableHead>Name</TableHead>
-                  <TableHead>Gender</TableHead>
-                  <TableHead>Phone</TableHead>
-                  <TableHead>Created</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {loading ? (
-                  <TableRow><TableCell colSpan={5} className="text-center">Loading...</TableCell></TableRow>
-                ) : patients.length === 0 ? (
-                  <TableRow><TableCell colSpan={5} className="text-center">No patients found</TableCell></TableRow>
-                ) : (
-                  patients.map((patient) => (
-                    <TableRow key={patient.id}>
-                      <TableCell className="font-medium">{patient.patientNumber}</TableCell>
-                      <TableCell>{patient.firstName} {patient.lastName}</TableCell>
-                      <TableCell>{patient.gender}</TableCell>
-                      <TableCell>{patient.phone}</TableCell>
-                      <TableCell>{new Date(patient.createdAt).toLocaleDateString()}</TableCell>
-                    </TableRow>
-                  ))
-                )}
-              </TableBody>
-            </Table>
+            <div className="overflow-x-auto">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Patient #</TableHead>
+                    <TableHead>Name</TableHead>
+                    <TableHead>Gender</TableHead>
+                    <TableHead>Phone</TableHead>
+                    <TableHead>Created</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {loading ? (
+                    <TableRow><TableCell colSpan={5} className="text-center py-8">Loading...</TableCell></TableRow>
+                  ) : patients.length === 0 ? (
+                    <TableRow><TableCell colSpan={5} className="text-center py-8">No patients found</TableCell></TableRow>
+                  ) : (
+                    patients.map((patient) => (
+                      <TableRow key={patient.id}>
+                        <TableCell className="font-medium">{patient.patientNumber}</TableCell>
+                        <TableCell>{patient.firstName} {patient.lastName}</TableCell>
+                        <TableCell>{patient.gender}</TableCell>
+                        <TableCell>{patient.phone}</TableCell>
+                        <TableCell>{new Date(patient.createdAt).toLocaleDateString()}</TableCell>
+                      </TableRow>
+                    ))
+                  )}
+                </TableBody>
+              </Table>
+            </div>
           </CardContent>
         </Card>
       </div>
