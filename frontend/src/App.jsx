@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Toaster } from '@/components/ui/toaster';
 import { useAuthStore } from '@/store';
+import { MainLayout } from '@/components/layout/MainLayout';
 
 import LandingPage from '@/pages/LandingPage';
 import LoginPage from '@/pages/LoginPage';

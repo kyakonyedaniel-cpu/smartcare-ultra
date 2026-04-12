@@ -35,8 +35,8 @@ export function Sidebar() {
       </button>
       
       <aside className={cn(
-        "fixed inset-y-0 left-0 z-40 w-64 bg-card border-r transform transition-transform duration-200",
-        sidebarOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
+        "fixed inset-y-0 left-0 z-40 w-64 bg-card border-r transform transition-transform duration-200 lg:translate-x-0 lg:static",
+        sidebarOpen ? "translate-x-0" : "-translate-x-full"
       )}>
         <div className="flex items-center gap-2 p-4 border-b">
           <Building2 className="h-8 w-8 text-primary" />
@@ -46,7 +46,7 @@ export function Sidebar() {
           </div>
         </div>
 
-        <nav className="p-4 space-y-1">
+        <nav className="p-4 space-y-1 overflow-y-auto max-h-[calc(100vh-120px)]">
           {menuItems.map((item) => (
             <NavLink
               key={item.path}
