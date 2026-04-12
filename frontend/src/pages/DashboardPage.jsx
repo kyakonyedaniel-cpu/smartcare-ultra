@@ -1,5 +1,10 @@
 import React from 'react';
 import { MainLayout } from '@/components/layout/MainLayout';
+import { StatCard } from '@/components/dashboard/StatCard';
+import { QuickActions } from '@/components/dashboard/QuickActions';
+import { SmartInsights } from '@/components/dashboard/SmartInsights';
+import { RevenueChart } from '@/components/dashboard/RevenueChart';
+import { DollarSign, Users, Calendar, AlertCircle } from 'lucide-react';
 
 export default function DashboardPage() {
   return (
@@ -11,37 +16,47 @@ export default function DashboardPage() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          <div className="bg-card rounded-lg border p-5">
-            <div className="space-y-2">
-              <p className="text-sm text-muted-foreground">Today's Revenue</p>
-              <p className="text-2xl font-bold">UGX 413,000</p>
-              <p className="text-xs text-green-600">+12% from yesterday</p>
-            </div>
-          </div>
+          <StatCard 
+            title="Today's Revenue" 
+            value="UGX 413,000" 
+            trend="up" 
+            trendValue="12%"
+            icon={DollarSign}
+            color="green"
+          />
+          <StatCard 
+            title="Patients Today" 
+            value="12" 
+            trend="up" 
+            trendValue="8%"
+            icon={Users}
+            color="blue"
+          />
+          <StatCard 
+            title="Appointments" 
+            value="8" 
+            trend="up" 
+            trendValue="5%"
+            icon={Calendar}
+            color="purple"
+          />
+          <StatCard 
+            title="Low Stock Items" 
+            value="3" 
+            trend="down" 
+            trendValue="2%"
+            icon={AlertCircle}
+            color="red"
+          />
+        </div>
 
-          <div className="bg-card rounded-lg border p-5">
-            <div className="space-y-2">
-              <p className="text-sm text-muted-foreground">Patients Today</p>
-              <p className="text-2xl font-bold">12</p>
-              <p className="text-xs text-muted-foreground">Active consultations</p>
-            </div>
-          </div>
+        <QuickActions />
 
-          <div className="bg-card rounded-lg border p-5">
-            <div className="space-y-2">
-              <p className="text-sm text-muted-foreground">Appointments</p>
-              <p className="text-2xl font-bold">8</p>
-              <p className="text-xs text-muted-foreground">Scheduled today</p>
-            </div>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+          <div className="lg:col-span-2">
+            <RevenueChart />
           </div>
-
-          <div className="bg-card rounded-lg border p-5">
-            <div className="space-y-2">
-              <p className="text-sm text-muted-foreground">Low Stock Items</p>
-              <p className="text-2xl font-bold">3</p>
-              <p className="text-xs text-red-600">Needs reorder</p>
-            </div>
-          </div>
+          <SmartInsights />
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
@@ -49,14 +64,14 @@ export default function DashboardPage() {
             <h3 className="font-semibold mb-4">Recent Appointments</h3>
             <div className="space-y-2">
               {[1, 2, 3].map((i) => (
-                <div key={i} className="flex items-center justify-between p-3 bg-muted rounded-md">
+                <div key={i} className="flex items-center justify-between p-3 bg-muted rounded-md hover:bg-muted/80 transition-colors">
                   <div className="flex items-center gap-3">
                     <div className="h-9 w-9 rounded-full bg-primary/20 flex items-center justify-center text-xs font-medium">
                       SN
                     </div>
                     <div>
                       <p className="text-sm font-medium">Sarah Nakato</p>
-                      <p className="text-xs text-muted-foreground">10:00 AM</p>
+                      <p className="text-xs text-muted-foreground">10:00 AM - Consultation</p>
                     </div>
                   </div>
                   <span className="text-xs text-green-600 font-medium">Confirmed</span>
@@ -69,7 +84,7 @@ export default function DashboardPage() {
             <h3 className="font-semibold mb-4">Low Stock Alerts</h3>
             <div className="space-y-2">
               {['Paracetamol 500mg', 'Amoxicillin 250mg', 'ORS Sachet'].map((drug, i) => (
-                <div key={i} className="flex items-center justify-between p-3 bg-muted rounded-md">
+                <div key={i} className="flex items-center justify-between p-3 bg-muted rounded-md hover:bg-muted/80 transition-colors">
                   <span className="text-sm font-medium">{drug}</span>
                   <span className="text-xs text-red-600 font-medium">Reorder</span>
                 </div>
