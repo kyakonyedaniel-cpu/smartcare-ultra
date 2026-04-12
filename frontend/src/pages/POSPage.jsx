@@ -5,8 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { ShoppingCart, Plus, Minus, Trash2 } from 'lucide-react';
+import { ShoppingCart, Plus, Minus, Trash2, CheckCircle } from 'lucide-react';
 import { formatCurrency } from '@/lib/utils';
 
 export default function POSPage() {
@@ -15,6 +14,7 @@ export default function POSPage() {
   const [selectedDrug, setSelectedDrug] = useState(null);
   const [quantity, setQuantity] = useState(1);
   const [paymentMethod, setPaymentMethod] = useState('CASH');
+  const [completedSale, setCompletedSale] = useState(null);
 
   const drugs = [
     { id: '1', name: 'Paracetamol 500mg', price: 500 },
@@ -47,14 +47,69 @@ export default function POSPage() {
     setCart(cart.filter(item => item.id !== id));
   };
 
+  const completeSale = () => {
+    if (cart.length === 0) {
+      alert('Cart is empty');
+      return;
+    }
+    const receipt = {
+      id: `RCP-${Date.now()}`,
+      items: cart,
+      subtotal,
+      tax,
+      total,
+      paymentMethod,
+      timestamp: new Date()
+    };
+    console.log('[v0] Sale completed:', receipt);
+    setCompletedSale(receipt);
+    setCart([]);
+    setPaymentMethod('CASH');
+    setTimeout(() => setCompletedSale(null), 3000);
+  };
+
   const subtotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
   const tax = Math.round(subtotal * 0.18);
   const total = subtotal + tax;
 
+  if (completedSale) {
+    return (
+      <MainLayout>
+        <div className="flex items-center justify-center min-h-[60vh]">
+          <Card className="w-full max-w-md">
+            <CardHeader className="text-center">
+              <div className="flex justify-center mb-4">
+                <CheckCircle size={48} className="text-green-600" />
+              </div>
+              <CardTitle>Sale Completed!</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="bg-green-50 p-4 rounded-lg">
+                <p className="text-sm text-muted-foreground">Receipt ID</p>
+                <p className="font-mono font-bold text-lg">{completedSale.id}</p>
+              </div>
+              <div className="space-y-2">
+                <div className="flex justify-between">
+                  <span className="text-muted-foreground">Payment Method:</span>
+                  <span className="font-medium">{completedSale.paymentMethod}</span>
+                </div>
+                <div className="flex justify-between text-lg font-bold border-t pt-2">
+                  <span>Total Amount:</span>
+                  <span>{formatCurrency(completedSale.total)}</span>
+                </div>
+              </div>
+              <Button onClick={() => setCompletedSale(null)} className="w-full">Start New Sale</Button>
+            </CardContent>
+          </Card>
+        </div>
+      </MainLayout>
+    );
+  }
+
   return (
     <MainLayout>
-      <div className="grid grid-cols-1 lg:grid-cols-4 gap-4">
-        <div className="lg:col-span-3 space-y-4">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="lg:col-span-2 space-y-4">
           <Card>
             <CardHeader>
               <CardTitle>Search Drugs</CardTitle>
@@ -66,15 +121,15 @@ export default function POSPage() {
                 onChange={(e) => setSearch(e.target.value)}
                 className="mb-4"
               />
-              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
                 {drugs.filter(d => d.name.toLowerCase().includes(search.toLowerCase())).map(drug => (
                   <Button 
                     key={drug.id} 
                     variant="outline" 
-                    className="h-20 flex flex-col items-center justify-center gap-1"
+                    className="h-20 flex flex-col items-center justify-center gap-1 text-center"
                     onClick={() => addToCart(drug)}
                   >
-                    <span className="text-sm font-medium">{drug.name}</span>
+                    <span className="text-sm font-medium leading-tight">{drug.name}</span>
                     <span className="text-xs text-muted-foreground">{formatCurrency(drug.price)}</span>
                   </Button>
                 ))}
@@ -121,56 +176,60 @@ export default function POSPage() {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <ShoppingCart size={20} />
-                Cart
+                Cart ({cart.length})
               </CardTitle>
             </CardHeader>
-            <CardContent className="space-y-4 max-h-[calc(100vh-200px)] overflow-y-auto">
-              {cart.length === 0 ? (
-                <p className="text-center text-muted-foreground py-8">Cart is empty</p>
-              ) : (
-                <>
+            <CardContent className="space-y-4">
+              <div className="max-h-[calc(100vh-350px)] overflow-y-auto">
+                {cart.length === 0 ? (
+                  <p className="text-center text-muted-foreground py-8 text-sm">Cart is empty</p>
+                ) : (
                   <div className="space-y-2">
                     {cart.map(item => (
-                      <div key={item.id} className="flex items-center justify-between p-3 bg-muted rounded-lg">
-                        <div>
-                          <p className="font-medium text-sm">{item.name}</p>
-                          <p className="text-xs text-muted-foreground">{formatCurrency(item.price)} x {item.quantity}</p>
+                      <div key={item.id} className="flex items-center justify-between p-2 bg-muted rounded text-sm">
+                        <div className="flex-1">
+                          <p className="font-medium text-xs">{item.name}</p>
+                          <p className="text-xs text-muted-foreground">{formatCurrency(item.price)}</p>
                         </div>
-                        <div className="flex items-center gap-2">
-                          <Button variant="ghost" size="icon" className="h-6 w-6" onClick={() => updateQuantity(item.id, -1)}>
-                            <Minus size={14} />
+                        <div className="flex items-center gap-1">
+                          <Button variant="ghost" size="sm" className="h-5 w-5 p-0" onClick={() => updateQuantity(item.id, -1)}>
+                            <Minus size={12} />
                           </Button>
-                          <span className="w-8 text-center">{item.quantity}</span>
-                          <Button variant="ghost" size="icon" className="h-6 w-6" onClick={() => updateQuantity(item.id, 1)}>
-                            <Plus size={14} />
+                          <span className="w-6 text-center text-xs font-medium">{item.quantity}</span>
+                          <Button variant="ghost" size="sm" className="h-5 w-5 p-0" onClick={() => updateQuantity(item.id, 1)}>
+                            <Plus size={12} />
                           </Button>
-                          <Button variant="ghost" size="icon" className="h-6 w-6 text-red-500" onClick={() => removeFromCart(item.id)}>
-                            <Trash2 size={14} />
+                          <Button variant="ghost" size="sm" className="h-5 w-5 p-0 text-red-500" onClick={() => removeFromCart(item.id)}>
+                            <Trash2 size={12} />
                           </Button>
                         </div>
                       </div>
                     ))}
                   </div>
+                )}
+              </div>
 
-                  <div className="border-t pt-4 space-y-2">
+              {cart.length > 0 && (
+                <>
+                  <div className="border-t pt-3 space-y-2 text-sm">
                     <div className="flex justify-between">
-                      <span>Subtotal</span>
-                      <span>{formatCurrency(subtotal)}</span>
+                      <span className="text-muted-foreground">Subtotal</span>
+                      <span className="font-medium">{formatCurrency(subtotal)}</span>
                     </div>
                     <div className="flex justify-between">
-                      <span>Tax (18%)</span>
-                      <span>{formatCurrency(tax)}</span>
+                      <span className="text-muted-foreground">Tax (18%)</span>
+                      <span className="font-medium">{formatCurrency(tax)}</span>
                     </div>
-                    <div className="flex justify-between font-bold text-lg">
+                    <div className="flex justify-between font-bold text-base border-t pt-2">
                       <span>Total</span>
                       <span>{formatCurrency(total)}</span>
                     </div>
                   </div>
 
                   <div className="space-y-2">
-                    <Label>Payment Method</Label>
+                    <Label className="text-sm">Payment Method</Label>
                     <Select value={paymentMethod} onValueChange={setPaymentMethod}>
-                      <SelectTrigger><SelectValue /></SelectTrigger>
+                      <SelectTrigger className="text-sm"><SelectValue /></SelectTrigger>
                       <SelectContent>
                         <SelectItem value="CASH">Cash</SelectItem>
                         <SelectItem value="MTN_MOMO">MTN MoMo</SelectItem>
@@ -179,7 +238,7 @@ export default function POSPage() {
                     </Select>
                   </div>
 
-                  <Button className="w-full" size="lg">
+                  <Button onClick={completeSale} className="w-full font-bold">
                     Complete Sale - {formatCurrency(total)}
                   </Button>
                 </>
