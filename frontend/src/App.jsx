@@ -18,12 +18,22 @@ import { ExpensesPage } from '@/pages/ExpensesPage';
 import { ReportsPage } from '@/pages/ReportsPage';
 import { SMSPage } from '@/pages/SMSPage';
 import { SettingsPage } from '@/pages/SettingsPage';
+import { SuperAdminPage } from '@/pages/SuperAdminPage';
+import { BillingPage } from '@/pages/BillingPage';
+import { UsersPage } from '@/pages/UsersPage';
 
 const queryClient = new QueryClient();
 
 function PrivateRoute({ children }) {
   const { token } = useAuthStore();
   return token ? <MainLayout>{children}</MainLayout> : <Navigate to="/login" />;
+}
+
+function AdminRoute({ children }) {
+  const { token, user } = useAuthStore();
+  if (!token) return <Navigate to="/login" />;
+  if (user?.role !== 'SUPERADMIN' && user?.role !== 'OWNER') return <Navigate to="/dashboard" />;
+  return <MainLayout>{children}</MainLayout>;
 }
 
 function App() {
@@ -45,6 +55,9 @@ function App() {
           <Route path="/reports" element={<PrivateRoute><ReportsPage /></PrivateRoute>} />
           <Route path="/sms" element={<PrivateRoute><SMSPage /></PrivateRoute>} />
           <Route path="/settings" element={<PrivateRoute><SettingsPage /></PrivateRoute>} />
+          <Route path="/billing" element={<PrivateRoute><BillingPage /></PrivateRoute>} />
+          <Route path="/users" element={<AdminRoute><UsersPage /></AdminRoute>} />
+          <Route path="/superadmin" element={<AdminRoute><SuperAdminPage /></AdminRoute>} />
         </Routes>
       </BrowserRouter>
       <Toaster />
