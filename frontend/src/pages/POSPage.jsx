@@ -53,8 +53,8 @@ export default function POSPage() {
 
   return (
     <MainLayout>
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div className="lg:col-span-2 space-y-6">
+      <div className="grid grid-cols-1 lg:grid-cols-4 gap-4">
+        <div className="lg:col-span-3 space-y-4">
           <Card>
             <CardHeader>
               <CardTitle>Search Drugs</CardTitle>
@@ -66,7 +66,7 @@ export default function POSPage() {
                 onChange={(e) => setSearch(e.target.value)}
                 className="mb-4"
               />
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
                 {drugs.filter(d => d.name.toLowerCase().includes(search.toLowerCase())).map(drug => (
                   <Button 
                     key={drug.id} 
@@ -116,7 +116,7 @@ export default function POSPage() {
           </Card>
         </div>
 
-        <div className="space-y-6">
+        <div>
           <Card className="sticky top-6">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
@@ -124,7 +124,7 @@ export default function POSPage() {
                 Cart
               </CardTitle>
             </CardHeader>
-            <CardContent className="space-y-4">
+            <CardContent className="space-y-4 max-h-[calc(100vh-200px)] overflow-y-auto">
               {cart.length === 0 ? (
                 <p className="text-center text-muted-foreground py-8">Cart is empty</p>
               ) : (
