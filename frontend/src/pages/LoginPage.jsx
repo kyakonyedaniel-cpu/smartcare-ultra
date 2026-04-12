@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuthStore } from '@/store';
-import { auth } from '@/lib/api';
+import { mockLogin } from '@/lib/mockAuth';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -22,12 +22,17 @@ export default function LoginPage() {
     setError('');
 
     try {
-      const { data } = await auth.login({ email, password });
-      setAuth(data.user, data.token, data.user.tenant);
-      localStorage.setItem('token', data.token);
+      console.log('[v0] Attempting login with email:', email);
+      const { token, user } = await mockLogin(email, password);
+      console.log('[v0] Login successful:', user);
+      
+      setAuth(user, token, user.tenant);
+      localStorage.setItem('token', token);
       navigate('/dashboard');
     } catch (err) {
-      setError(err.response?.data?.error || 'Login failed');
+      console.error('[v0] Login error:', err);
+      const errorMessage = err.message || 'Login failed';
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -93,8 +98,10 @@ export default function LoginPage() {
 
         <div className="mt-6 p-4 bg-muted rounded-lg text-sm">
           <p className="font-medium mb-2">Demo Credentials:</p>
-          <p>Tenant: admin@demo.clinic / demo1234</p>
-          <p>Super Admin: admin@smartcare.ug / superadmin123</p>
+          <p className="text-xs mb-1"><strong>Email:</strong> admin@demo.clinic</p>
+          <p className="text-xs mb-3"><strong>Password:</strong> demo1234</p>
+          <p className="text-xs mb-1"><strong>Or Email:</strong> admin@smartcare.ug</p>
+          <p className="text-xs"><strong>Password:</strong> superadmin123</p>
         </div>
       </div>
     </div>
