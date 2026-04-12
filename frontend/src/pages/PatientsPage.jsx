@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { MainLayout } from '@/components/layout/MainLayout';
 import { patients as patientsApi } from '@/lib/api';
 import { Button } from '@/components/ui/button';
@@ -9,10 +8,9 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Search, Plus, Eye } from 'lucide-react';
+import { Search, Plus } from 'lucide-react';
 
 export default function PatientsPage() {
-  const navigate = useNavigate();
   const [patients, setPatients] = useState([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
@@ -129,32 +127,21 @@ export default function PatientsPage() {
                     <TableHead>Gender</TableHead>
                     <TableHead>Phone</TableHead>
                     <TableHead>Created</TableHead>
-                    <TableHead>Action</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {loading ? (
-                    <TableRow><TableCell colSpan={6} className="text-center py-8">Loading...</TableCell></TableRow>
+                    <TableRow><TableCell colSpan={5} className="text-center py-8">Loading...</TableCell></TableRow>
                   ) : patients.length === 0 ? (
-                    <TableRow><TableCell colSpan={6} className="text-center py-8">No patients found</TableCell></TableRow>
+                    <TableRow><TableCell colSpan={5} className="text-center py-8">No patients found</TableCell></TableRow>
                   ) : (
                     patients.map((patient) => (
-                      <TableRow key={patient.id} className="hover:bg-muted/50 cursor-pointer transition-colors">
+                      <TableRow key={patient.id} className="hover:bg-muted/50">
                         <TableCell className="font-medium">{patient.patientNumber}</TableCell>
                         <TableCell>{patient.firstName} {patient.lastName}</TableCell>
                         <TableCell>{patient.gender}</TableCell>
                         <TableCell>{patient.phone}</TableCell>
                         <TableCell>{new Date(patient.createdAt).toLocaleDateString()}</TableCell>
-                        <TableCell>
-                          <Button 
-                            variant="ghost" 
-                            size="sm"
-                            onClick={() => navigate(`/patients/${patient.id}`)}
-                          >
-                            <Eye size={16} className="mr-1" />
-                            View
-                          </Button>
-                        </TableCell>
                       </TableRow>
                     ))
                   )}

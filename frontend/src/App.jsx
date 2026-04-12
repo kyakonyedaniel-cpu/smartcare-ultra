@@ -3,13 +3,11 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Toaster } from '@/components/ui/toaster';
 import { useAuthStore } from '@/store';
-import { MainLayout } from '@/components/layout/MainLayout';
 
 import LandingPage from '@/pages/LandingPage';
 import LoginPage from '@/pages/LoginPage';
 import DashboardPage from '@/pages/DashboardPage';
 import PatientsPage from '@/pages/PatientsPage';
-import PatientDetailPage from '@/pages/PatientDetailPage';
 import DoctorPage from '@/pages/DoctorPage';
 import PharmacyPage from '@/pages/PharmacyPage';
 import POSPage from '@/pages/POSPage';
@@ -37,7 +35,6 @@ function App() {
           <Route path="/register" element={<LoginPage />} />
           <Route path="/dashboard" element={<PrivateRoute><DashboardPage /></PrivateRoute>} />
           <Route path="/patients" element={<PrivateRoute><PatientsPage /></PrivateRoute>} />
-          <Route path="/patients/:patientId" element={<PrivateRoute><PatientDetailPage /></PrivateRoute>} />
           <Route path="/doctor" element={<PrivateRoute><DoctorPage /></PrivateRoute>} />
           <Route path="/pharmacy" element={<PrivateRoute><PharmacyPage /></PrivateRoute>} />
           <Route path="/pos" element={<PrivateRoute><POSPage /></PrivateRoute>} />
