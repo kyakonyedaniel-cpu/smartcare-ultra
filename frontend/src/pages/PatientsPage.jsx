@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Search, Plus, X, Eye, ChevronLeft, ChevronRight } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { Search, Plus, X, Eye, ChevronLeft, ChevronRight, User } from 'lucide-react';
 
 const mockPatients = [
   { id: '1', patientNumber: 'PT-001', firstName: 'Sarah', lastName: 'Nakato', gender: 'FEMALE', phone: '+256701234567', email: 'sarah@email.com', address: 'Kampala', createdAt: '2026-04-01' },
@@ -13,11 +14,10 @@ const mockPatients = [
 ];
 
 export function PatientsPage() {
+  const navigate = useNavigate();
   const [patients, setPatients] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showAddModal, setShowAddModal] = useState(false);
-  const [showViewModal, setShowViewModal] = useState(false);
-  const [selectedPatient, setSelectedPatient] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [formData, setFormData] = useState({
@@ -60,8 +60,7 @@ export function PatientsPage() {
   };
 
   const viewPatient = (patient) => {
-    setSelectedPatient(patient);
-    setShowViewModal(true);
+    navigate(`/patients/${patient.id}`);
   };
 
   return (
@@ -257,57 +256,6 @@ export function PatientsPage() {
                 </button>
               </div>
             </form>
-          </div>
-        </div>
-      )}
-
-      {showViewModal && selectedPatient && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4" onClick={() => setShowViewModal(false)}>
-          <div className="bg-white rounded-2xl p-6 md:p-8 w-full max-w-lg shadow-2xl" onClick={e => e.stopPropagation()}>
-            <div className="flex justify-between items-center mb-6">
-              <h2 className="text-xl font-bold text-gray-900">Patient Details</h2>
-              <button onClick={() => setShowViewModal(false)} className="p-2 hover:bg-gray-100 rounded-xl transition-colors">
-                <X size={20} className="text-gray-500" />
-              </button>
-            </div>
-            <div className="space-y-4">
-              <div className="flex items-center gap-4 p-4 bg-gray-50 rounded-xl">
-                <div className={`h-16 w-16 rounded-xl flex items-center justify-center text-white font-bold text-lg shadow ${
-                  selectedPatient.gender === 'MALE' ? 'bg-gradient-to-br from-blue-500 to-indigo-600' : 'bg-gradient-to-br from-pink-500 to-rose-600'
-                }`}>
-                  {selectedPatient.firstName[0]}{selectedPatient.lastName[0]}
-                </div>
-                <div>
-                  <p className="text-xl font-bold text-gray-900">{selectedPatient.firstName} {selectedPatient.lastName}</p>
-                  <p className="text-gray-500">{selectedPatient.patientNumber}</p>
-                </div>
-              </div>
-              <div className="grid grid-cols-2 gap-4">
-                <div className="p-4 bg-gray-50 rounded-xl">
-                  <p className="text-xs text-gray-500 uppercase tracking-wider mb-1">Gender</p>
-                  <p className="font-medium text-gray-900">{selectedPatient.gender}</p>
-                </div>
-                <div className="p-4 bg-gray-50 rounded-xl">
-                  <p className="text-xs text-gray-500 uppercase tracking-wider mb-1">Phone</p>
-                  <p className="font-medium text-gray-900">{selectedPatient.phone || '-'}</p>
-                </div>
-                <div className="p-4 bg-gray-50 rounded-xl">
-                  <p className="text-xs text-gray-500 uppercase tracking-wider mb-1">Email</p>
-                  <p className="font-medium text-gray-900">{selectedPatient.email || '-'}</p>
-                </div>
-                <div className="p-4 bg-gray-50 rounded-xl">
-                  <p className="text-xs text-gray-500 uppercase tracking-wider mb-1">Address</p>
-                  <p className="font-medium text-gray-900">{selectedPatient.address || '-'}</p>
-                </div>
-              </div>
-              <div className="p-4 bg-gray-50 rounded-xl">
-                <p className="text-xs text-gray-500 uppercase tracking-wider mb-1">Registered</p>
-                <p className="font-medium text-gray-900">{selectedPatient.createdAt ? new Date(selectedPatient.createdAt).toLocaleDateString() : '-'}</p>
-              </div>
-            </div>
-            <button onClick={() => setShowViewModal(false)} className="w-full mt-6 px-4 py-3 border border-gray-200 text-gray-700 rounded-xl font-medium hover:bg-gray-50 transition-all">
-              Close
-            </button>
           </div>
         </div>
       )}
