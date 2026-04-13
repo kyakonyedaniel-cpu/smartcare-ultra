@@ -20,3 +20,16 @@ export const useAppStore = create((set) => ({
   sidebarOpen: true,
   toggleSidebar: () => set((state) => ({ sidebarOpen: !state.sidebarOpen })),
 }));
+
+export const useThemeStore = create(
+  persist(
+    (set) => ({
+      theme: 'light',
+      setTheme: (theme) => set({ theme }),
+      toggleTheme: () => set((state) => ({ 
+        theme: state.theme === 'light' ? 'dark' : 'light' 
+      })),
+    }),
+    { name: 'smartcare-theme' }
+  )
+);
