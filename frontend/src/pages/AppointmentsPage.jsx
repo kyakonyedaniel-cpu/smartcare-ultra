@@ -4,6 +4,8 @@ import {
   X, Video, Phone, Home, Filter, MoreVertical, CheckCircle,
   AlertCircle, XCircle
 } from 'lucide-react';
+import { useTheme } from '@/hooks/useTheme';
+import { cn } from '@/lib/utils';
 
 const mockAppointments = [
   { id: '1', patient: 'Sarah Nakato', patientId: '1', time: '09:00', duration: 30, type: 'Consultation', status: 'completed', doctor: 'Dr. James Okello', notes: 'Follow-up on hypertension medication' },
@@ -34,6 +36,7 @@ const appointmentTypes = [
 const weekDays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
 export function AppointmentsPage() {
+  const { isDark, card, input, textMuted, getBadge } = useTheme();
   const [appointments, setAppointments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [currentDate, setCurrentDate] = useState(new Date());
@@ -144,8 +147,8 @@ export function AppointmentsPage() {
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-2xl md:text-3xl font-bold text-gray-900">Appointments</h1>
-          <p className="text-gray-500 mt-1">
+          <h1 className={cn("text-2xl md:text-3xl font-bold", isDark ? "text-white" : "text-gray-900")}>Appointments</h1>
+          <p className={cn(textMuted, "mt-1")}>
             {viewMode === 'week' 
               ? `Week of ${getDaysInWeek()[0].toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}`
               : currentDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
@@ -156,7 +159,7 @@ export function AppointmentsPage() {
             <button
               onClick={() => setViewMode('week')}
               className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
-                viewMode === 'week' ? 'bg-white shadow text-blue-600' : 'text-gray-600 hover:text-gray-900'
+                viewMode === 'week' ? cn(isDark ? "bg-slate-800" : "bg-white", "shadow text-blue-600") : cn(isDark ? "text-slate-400" : "text-gray-600", isDark ? "hover:text-white" : "hover:text-gray-900")
               }`}
             >
               Week
@@ -164,7 +167,7 @@ export function AppointmentsPage() {
             <button
               onClick={() => setViewMode('month')}
               className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
-                viewMode === 'month' ? 'bg-white shadow text-blue-600' : 'text-gray-600 hover:text-gray-900'
+                viewMode === 'month' ? cn(isDark ? "bg-slate-800" : "bg-white", "shadow text-blue-600") : cn(isDark ? "text-slate-400" : "text-gray-600", isDark ? "hover:text-white" : "hover:text-gray-900")
               }`}
             >
               Month
@@ -231,27 +234,27 @@ export function AppointmentsPage() {
         <div className="flex items-center gap-2">
           <button
             onClick={() => viewMode === 'week' ? navigateWeek(-1) : navigateMonth(-1)}
-            className="p-2.5 rounded-xl bg-white border border-gray-200 hover:bg-gray-50 transition-colors"
+            className={cn("p-2.5 rounded-xl border transition-colors", isDark ? "bg-slate-800 border-slate-700 hover:bg-slate-700" : "bg-white border-gray-200 hover:bg-gray-50")}
           >
-            <ChevronLeft size={20} className="text-gray-600" />
+            <ChevronLeft size={20} className={isDark ? "text-slate-400" : "text-gray-600"} />
           </button>
           <button
             onClick={() => setCurrentDate(new Date())}
-            className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors"
+            className={cn("px-4 py-2 text-sm font-medium rounded-xl border transition-colors", isDark ? "bg-slate-800 border-slate-700 text-slate-300 hover:bg-slate-700" : "bg-white border-gray-200 text-gray-700 hover:bg-gray-50")}
           >
             Today
           </button>
           <button
             onClick={() => viewMode === 'week' ? navigateWeek(1) : navigateMonth(1)}
-            className="p-2.5 rounded-xl bg-white border border-gray-200 hover:bg-gray-50 transition-colors"
+            className={cn("p-2.5 rounded-xl border transition-colors", isDark ? "bg-slate-800 border-slate-700 hover:bg-slate-700" : "bg-white border-gray-200 hover:bg-gray-50")}
           >
-            <ChevronRight size={20} className="text-gray-600" />
+            <ChevronRight size={20} className={isDark ? "text-slate-400" : "text-gray-600"} />
           </button>
         </div>
         <select
           value={filterStatus}
           onChange={(e) => setFilterStatus(e.target.value)}
-          className="px-4 py-2 bg-white border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className={cn("px-4 py-2 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500", isDark ? "bg-slate-800 border-slate-700 text-white" : "bg-white border-gray-200")}
         >
           <option value="all">All Status</option>
           <option value="scheduled">Scheduled</option>
@@ -261,27 +264,24 @@ export function AppointmentsPage() {
         </select>
       </div>
 
-      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+      <div className={cn("rounded-2xl shadow-sm overflow-hidden", isDark ? "bg-slate-900 border-slate-800" : "bg-white border-gray-100")}>
         {viewMode === 'week' ? (
           <div className="overflow-x-auto">
             <div className="min-w-[900px]">
-              <div className="grid grid-cols-8 border-b border-gray-100">
-                <div className="p-4 text-xs font-semibold text-gray-500 uppercase tracking-wider bg-gray-50">
+              <div className={cn("grid grid-cols-8 border-b", isDark ? "border-slate-800" : "border-gray-100")}>
+                <div className={cn("p-4 text-xs font-semibold uppercase tracking-wider", isDark ? "bg-slate-800 text-slate-400" : "bg-gray-50 text-gray-500")}>
                   Time
                 </div>
                 {getDaysInWeek().map((day, i) => (
                   <div
                     key={i}
-                    className={`p-4 text-center border-l border-gray-100 ${
-                      isToday(day) ? 'bg-blue-50' : 'bg-gray-50'
-                    }`}
+                    className={cn("p-4 text-center border-l", isDark ? "border-slate-800" : "border-gray-100", 
+                      isToday(day) ? (isDark ? "bg-blue-900/30" : "bg-blue-50") : (isDark ? "bg-slate-800" : "bg-gray-50"))}
                   >
-                    <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                    <p className={cn("text-xs font-semibold uppercase tracking-wider", isDark ? "text-slate-400" : "text-gray-500")}>
                       {weekDays[day.getDay()]}
                     </p>
-                    <p className={`text-lg font-bold mt-1 ${
-                      isToday(day) ? 'text-blue-600' : 'text-gray-900'
-                    }`}>
+                    <p className={cn("text-lg font-bold mt-1", isDark ? "text-white" : "text-gray-900")}>
                       {day.getDate()}
                     </p>
                   </div>
@@ -290,8 +290,8 @@ export function AppointmentsPage() {
               
               <div className="max-h-[500px] overflow-y-auto">
                 {timeSlots.map((slot) => (
-                  <div key={slot} className="grid grid-cols-8 border-b border-gray-100 hover:bg-gray-50/50 transition-colors">
-                    <div className="p-3 text-sm font-medium text-gray-500 bg-gray-50/50">
+                  <div key={slot} className={cn("grid grid-cols-8 border-b transition-colors", isDark ? "border-slate-800 hover:bg-slate-800/50" : "border-gray-100 hover:bg-gray-50/50")}>
+                    <div className={cn("p-3 text-sm font-medium", isDark ? "text-slate-400 bg-slate-800/50" : "text-gray-500 bg-gray-50/50")}>
                       {slot}
                     </div>
                     {getDaysInWeek().map((day, dayIndex) => {
@@ -303,9 +303,8 @@ export function AppointmentsPage() {
                       return (
                         <div
                           key={dayIndex}
-                          className={`min-h-[60px] p-2 border-l border-gray-100 ${
-                            isToday(day) ? 'bg-blue-50/30' : ''
-                          }`}
+                          className={cn("min-h-[60px] p-2 border-l", isDark ? "border-slate-800" : "border-gray-100",
+                            isToday(day) ? (isDark ? "bg-blue-900/20" : "bg-blue-50/30") : "")}
                         >
                           {dayAppointments.slice(0, 2).map((apt) => (
                             <div
@@ -318,7 +317,7 @@ export function AppointmentsPage() {
                             </div>
                           ))}
                           {dayAppointments.length > 2 && (
-                            <p className="text-xs text-gray-500 pl-2">+{dayAppointments.length - 2} more</p>
+                            <p className={cn("text-xs pl-2", isDark ? "text-slate-400" : "text-gray-500")}>+{dayAppointments.length - 2} more</p>
                           )}
                         </div>
                       );
@@ -331,7 +330,7 @@ export function AppointmentsPage() {
         ) : (
           <div className="grid grid-cols-7">
             {weekDays.map((day) => (
-              <div key={day} className="p-3 text-center text-xs font-semibold text-gray-500 uppercase tracking-wider bg-gray-50 border-b border-gray-100">
+              <div key={day} className={cn("p-3 text-center text-xs font-semibold uppercase tracking-wider border-b", isDark ? "bg-slate-800 text-slate-400 border-slate-800" : "bg-gray-50 text-gray-500 border-gray-100")}>
                 {day}
               </div>
             ))}
@@ -341,13 +340,13 @@ export function AppointmentsPage() {
               return (
                 <div
                   key={i}
-                  className={`min-h-[100px] p-2 border-b border-r border-gray-100 ${
-                    !isCurrentMonth ? 'bg-gray-50' : ''
-                  } ${isToday(day) ? 'bg-blue-50' : ''}`}
+                  className={cn("min-h-[100px] p-2 border-b border-r", isDark ? "border-slate-800" : "border-gray-100",
+                    !isCurrentMonth ? (isDark ? "bg-slate-800" : "bg-gray-50") : "",
+                    isToday(day) ? (isDark ? "bg-blue-900/20" : "bg-blue-50") : "")}
                 >
-                  <p className={`text-sm font-medium mb-1 ${
-                    isCurrentMonth ? 'text-gray-900' : 'text-gray-400'
-                  } ${isToday(day) ? 'w-7 h-7 rounded-full bg-blue-600 text-white flex items-center justify-center' : ''}`}>
+                  <p className={cn("text-sm font-medium mb-1", isDark ? "text-white" : "text-gray-900",
+                    !isCurrentMonth && (isDark ? "text-slate-500" : "text-gray-400"),
+                    isToday(day) && "w-7 h-7 rounded-full bg-blue-600 text-white flex items-center justify-center")}>
                     {day.getDate()}
                   </p>
                   {dayAppointments.slice(0, 3).map((apt) => (
@@ -360,7 +359,7 @@ export function AppointmentsPage() {
                     </div>
                   ))}
                   {dayAppointments.length > 3 && (
-                    <p className="text-xs text-gray-500 pl-1">+{dayAppointments.length - 3} more</p>
+                    <p className={cn("text-xs pl-1", isDark ? "text-slate-400" : "text-gray-500")}>+{dayAppointments.length - 3} more</p>
                   )}
                 </div>
               );
@@ -371,22 +370,22 @@ export function AppointmentsPage() {
 
       {showAddModal && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4" onClick={() => setShowAddModal(false)}>
-          <div className="bg-white rounded-2xl p-6 md:p-8 w-full max-w-lg shadow-2xl" onClick={e => e.stopPropagation()}>
+          <div className={cn("rounded-2xl p-6 md:p-8 w-full max-w-lg shadow-2xl", isDark ? "bg-slate-900" : "bg-white")} onClick={e => e.stopPropagation()}>
             <div className="flex justify-between items-center mb-6">
               <div>
-                <h2 className="text-xl font-bold text-gray-900">New Appointment</h2>
-                <p className="text-sm text-gray-500 mt-1">Schedule a new patient appointment</p>
+                <h2 className={cn("text-xl font-bold", isDark ? "text-white" : "text-gray-900")}>New Appointment</h2>
+                <p className={cn("text-sm mt-1", textMuted)}>Schedule a new patient appointment</p>
               </div>
-              <button onClick={() => setShowAddModal(false)} className="p-2 hover:bg-gray-100 rounded-xl transition-colors">
-                <X size={20} className="text-gray-500" />
+              <button onClick={() => setShowAddModal(false)} className={cn("p-2 rounded-xl transition-colors", isDark ? "hover:bg-slate-800" : "hover:bg-gray-100")}>
+                <X size={20} className={textMuted} />
               </button>
             </div>
             <form onSubmit={handleSubmit} className="space-y-5">
               <div className="space-y-2">
-                <label className="text-sm font-medium text-gray-700">Patient</label>
+                <label className={cn("text-sm font-medium", isDark ? "text-slate-300" : "text-gray-700")}>Patient</label>
                 <input
                   type="text"
-                  className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+                  className={cn("w-full px-4 py-3 rounded-xl", input)}
                   value={formData.patient}
                   onChange={e => setFormData({...formData, patient: e.target.value})}
                   placeholder="Search or enter patient name"
@@ -395,19 +394,19 @@ export function AppointmentsPage() {
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <label className="text-sm font-medium text-gray-700">Date</label>
+                  <label className={cn("text-sm font-medium", isDark ? "text-slate-300" : "text-gray-700")}>Date</label>
                   <input
                     type="date"
-                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+                    className={cn("w-full px-4 py-3 rounded-xl", input)}
                     value={formData.date}
                     onChange={e => setFormData({...formData, date: e.target.value})}
                     required
                   />
                 </div>
                 <div className="space-y-2">
-                  <label className="text-sm font-medium text-gray-700">Time</label>
+                  <label className={cn("text-sm font-medium", isDark ? "text-slate-300" : "text-gray-700")}>Time</label>
                   <select
-                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+                    className={cn("w-full px-4 py-3 rounded-xl", input)}
                     value={formData.time}
                     onChange={e => setFormData({...formData, time: e.target.value})}
                   >
@@ -419,9 +418,9 @@ export function AppointmentsPage() {
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <label className="text-sm font-medium text-gray-700">Type</label>
+                  <label className={cn("text-sm font-medium", isDark ? "text-slate-300" : "text-gray-700")}>Type</label>
                   <select
-                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+                    className={cn("w-full px-4 py-3 rounded-xl", input)}
                     value={formData.type}
                     onChange={e => setFormData({...formData, type: e.target.value})}
                   >
@@ -431,9 +430,9 @@ export function AppointmentsPage() {
                   </select>
                 </div>
                 <div className="space-y-2">
-                  <label className="text-sm font-medium text-gray-700">Duration</label>
+                  <label className={cn("text-sm font-medium", isDark ? "text-slate-300" : "text-gray-700")}>Duration</label>
                   <select
-                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+                    className={cn("w-full px-4 py-3 rounded-xl", input)}
                     value={formData.duration}
                     onChange={e => setFormData({...formData, duration: Number(e.target.value)})}
                   >
@@ -445,9 +444,9 @@ export function AppointmentsPage() {
                 </div>
               </div>
               <div className="space-y-2">
-                <label className="text-sm font-medium text-gray-700">Doctor</label>
+                <label className={cn("text-sm font-medium", isDark ? "text-slate-300" : "text-gray-700")}>Doctor</label>
                 <select
-                  className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+                  className={cn("w-full px-4 py-3 rounded-xl", input)}
                   value={formData.doctor}
                   onChange={e => setFormData({...formData, doctor: e.target.value})}
                 >
@@ -457,9 +456,9 @@ export function AppointmentsPage() {
                 </select>
               </div>
               <div className="space-y-2">
-                <label className="text-sm font-medium text-gray-700">Notes</label>
+                <label className={cn("text-sm font-medium", isDark ? "text-slate-300" : "text-gray-700")}>Notes</label>
                 <textarea
-                  className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all resize-none"
+                  className={cn("w-full px-4 py-3 rounded-xl resize-none", input)}
                   rows={3}
                   value={formData.notes}
                   onChange={e => setFormData({...formData, notes: e.target.value})}
@@ -470,7 +469,7 @@ export function AppointmentsPage() {
                 <button type="submit" className="flex-1 px-4 py-3 bg-blue-600 text-white rounded-xl font-medium hover:bg-blue-700 transition-all shadow-lg shadow-blue-600/25">
                   Schedule Appointment
                 </button>
-                <button type="button" onClick={() => setShowAddModal(false)} className="flex-1 px-4 py-3 border border-gray-200 text-gray-700 rounded-xl font-medium hover:bg-gray-50 transition-all">
+                <button type="button" onClick={() => setShowAddModal(false)} className={cn("flex-1 px-4 py-3 rounded-xl font-medium transition-all", isDark ? "border border-slate-700 text-slate-300 hover:bg-slate-800" : "border border-gray-200 text-gray-700 hover:bg-gray-50")}>
                   Cancel
                 </button>
               </div>
@@ -481,15 +480,15 @@ export function AppointmentsPage() {
 
       {selectedAppointment && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4" onClick={() => setSelectedAppointment(null)}>
-          <div className="bg-white rounded-2xl p-6 md:p-8 w-full max-w-md shadow-2xl" onClick={e => e.stopPropagation()}>
+          <div className={cn("rounded-2xl p-6 md:p-8 w-full max-w-md shadow-2xl", isDark ? "bg-slate-900" : "bg-white")} onClick={e => e.stopPropagation()}>
             <div className="flex justify-between items-center mb-6">
-              <h2 className="text-xl font-bold text-gray-900">Appointment Details</h2>
-              <button onClick={() => setSelectedAppointment(null)} className="p-2 hover:bg-gray-100 rounded-xl transition-colors">
-                <X size={20} className="text-gray-500" />
+              <h2 className={cn("text-xl font-bold", isDark ? "text-white" : "text-gray-900")}>Appointment Details</h2>
+              <button onClick={() => setSelectedAppointment(null)} className={cn("p-2 rounded-xl transition-colors", isDark ? "hover:bg-slate-800" : "hover:bg-gray-100")}>
+                <X size={20} className={textMuted} />
               </button>
             </div>
             <div className="space-y-4">
-              <div className="flex items-center gap-4 p-4 bg-gray-50 rounded-xl">
+              <div className={cn("flex items-center gap-4 p-4 rounded-xl", isDark ? "bg-slate-800" : "bg-gray-50")}>
                 <div className={`h-12 w-12 rounded-xl flex items-center justify-center text-white font-bold ${
                   selectedAppointment.type === 'consultation' ? 'bg-blue-500' :
                   selectedAppointment.type === 'checkup' ? 'bg-green-500' :
@@ -498,34 +497,34 @@ export function AppointmentsPage() {
                   <User size={20} />
                 </div>
                 <div>
-                  <p className="font-semibold text-gray-900">{selectedAppointment.patient}</p>
-                  <p className="text-sm text-gray-500">{selectedAppointment.type}</p>
+                  <p className={cn("font-semibold", isDark ? "text-white" : "text-gray-900")}>{selectedAppointment.patient}</p>
+                  <p className={cn("text-sm", textMuted)}>{selectedAppointment.type}</p>
                 </div>
               </div>
               <div className="grid grid-cols-2 gap-4">
-                <div className="p-3 bg-gray-50 rounded-xl">
-                  <p className="text-xs text-gray-500 uppercase tracking-wider mb-1">Time</p>
-                  <p className="font-medium text-gray-900">{selectedAppointment.time}</p>
+                <div className={cn("p-3 rounded-xl", isDark ? "bg-slate-800" : "bg-gray-50")}>
+                  <p className={cn("text-xs uppercase tracking-wider mb-1", textMuted)}>Time</p>
+                  <p className={cn("font-medium", isDark ? "text-white" : "text-gray-900")}>{selectedAppointment.time}</p>
                 </div>
-                <div className="p-3 bg-gray-50 rounded-xl">
-                  <p className="text-xs text-gray-500 uppercase tracking-wider mb-1">Duration</p>
-                  <p className="font-medium text-gray-900">{selectedAppointment.duration} min</p>
+                <div className={cn("p-3 rounded-xl", isDark ? "bg-slate-800" : "bg-gray-50")}>
+                  <p className={cn("text-xs uppercase tracking-wider mb-1", textMuted)}>Duration</p>
+                  <p className={cn("font-medium", isDark ? "text-white" : "text-gray-900")}>{selectedAppointment.duration} min</p>
                 </div>
-                <div className="p-3 bg-gray-50 rounded-xl">
-                  <p className="text-xs text-gray-500 uppercase tracking-wider mb-1">Doctor</p>
-                  <p className="font-medium text-gray-900">{selectedAppointment.doctor}</p>
+                <div className={cn("p-3 rounded-xl", isDark ? "bg-slate-800" : "bg-gray-50")}>
+                  <p className={cn("text-xs uppercase tracking-wider mb-1", textMuted)}>Doctor</p>
+                  <p className={cn("font-medium", isDark ? "text-white" : "text-gray-900")}>{selectedAppointment.doctor}</p>
                 </div>
-                <div className="p-3 bg-gray-50 rounded-xl">
-                  <p className="text-xs text-gray-500 uppercase tracking-wider mb-1">Status</p>
+                <div className={cn("p-3 rounded-xl", isDark ? "bg-slate-800" : "bg-gray-50")}>
+                  <p className={cn("text-xs uppercase tracking-wider mb-1", textMuted)}>Status</p>
                   <span className={`px-2 py-1 rounded-full text-xs font-medium capitalize ${getStatusBadge(selectedAppointment.status)}`}>
                     {selectedAppointment.status}
                   </span>
                 </div>
               </div>
               {selectedAppointment.notes && (
-                <div className="p-4 bg-gray-50 rounded-xl">
-                  <p className="text-xs text-gray-500 uppercase tracking-wider mb-1">Notes</p>
-                  <p className="text-gray-700">{selectedAppointment.notes}</p>
+                <div className={cn("p-4 rounded-xl", isDark ? "bg-slate-800" : "bg-gray-50")}>
+                  <p className={cn("text-xs uppercase tracking-wider mb-1", textMuted)}>Notes</p>
+                  <p className={isDark ? "text-slate-300" : "text-gray-700"}>{selectedAppointment.notes}</p>
                 </div>
               )}
             </div>
@@ -533,10 +532,10 @@ export function AppointmentsPage() {
               <button className="flex-1 px-4 py-3 bg-blue-600 text-white rounded-xl font-medium hover:bg-blue-700 transition-all">
                 Start Session
               </button>
-              <button className="px-4 py-3 border border-gray-200 text-gray-700 rounded-xl font-medium hover:bg-gray-50 transition-all">
+              <button className={cn("px-4 py-3 rounded-xl font-medium transition-all", isDark ? "border border-slate-700 text-slate-300 hover:bg-slate-800" : "border border-gray-200 text-gray-700 hover:bg-gray-50")}>
                 <Phone size={18} />
               </button>
-              <button className="px-4 py-3 border border-gray-200 text-gray-700 rounded-xl font-medium hover:bg-gray-50 transition-all">
+              <button className={cn("px-4 py-3 rounded-xl font-medium transition-all", isDark ? "border border-slate-700 text-slate-300 hover:bg-slate-800" : "border border-gray-200 text-gray-700 hover:bg-gray-50")}>
                 <Video size={18} />
               </button>
             </div>

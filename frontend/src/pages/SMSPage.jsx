@@ -5,6 +5,8 @@ import {
   Calendar, Bell, AlertTriangle, Settings, ChevronDown,
   Play, Pause, Trash2, Eye, Copy, Star
 } from 'lucide-react';
+import { useTheme } from '@/hooks/useTheme';
+import { cn } from '@/lib/utils';
 
 const mockSMSLogs = [
   { id: '1', recipient: '+256701234567', patient: 'Sarah Nakato', message: 'Reminder: Your appointment with Dr. James Okello is tomorrow at 10:00 AM.', type: 'appointment', status: 'delivered', sentAt: '2026-04-13 08:00', deliveredAt: '2026-04-13 08:01' },
@@ -31,6 +33,7 @@ const scheduledMessages = [
 ];
 
 export function SMSPage() {
+  const { isDark, input, textMuted, getBadge } = useTheme();
   const [activeTab, setActiveTab] = useState('compose');
   const [logs, setLogs] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -110,13 +113,13 @@ export function SMSPage() {
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-2xl md:text-3xl font-bold text-gray-900">SMS Center</h1>
-          <p className="text-gray-500 mt-1">Send and manage patient communications</p>
+          <h1 className={cn("text-2xl md:text-3xl font-bold", isDark ? "text-white" : "text-gray-900")}>SMS Center</h1>
+          <p className={cn(textMuted, "mt-1")}>Send and manage patient communications</p>
         </div>
         <div className="flex gap-3">
           <button
             onClick={() => setShowTemplateModal(true)}
-            className="flex items-center gap-2 px-4 py-2.5 border border-gray-200 rounded-xl text-gray-700 hover:bg-gray-50 transition-colors"
+            className={cn("flex items-center gap-2 px-4 py-2.5 rounded-xl transition-colors", isDark ? "border border-slate-700 text-slate-300 hover:bg-slate-800" : "border border-gray-200 text-gray-700 hover:bg-gray-50")}
           >
             <Copy size={18} />
             Templates
@@ -178,18 +181,17 @@ export function SMSPage() {
         </div>
       </div>
 
-      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-        <div className="border-b border-gray-100 overflow-x-auto">
+      <div className={cn("rounded-2xl shadow-sm overflow-hidden", isDark ? "bg-slate-900 border-slate-800" : "bg-white border-gray-100")}>
+        <div className={cn("border-b overflow-x-auto", isDark ? "border-slate-800" : "border-gray-100")}>
           <div className="flex min-w-max">
             {['compose', 'logs', 'scheduled', 'settings'].map((tab) => (
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab)}
-                className={`flex items-center gap-2 px-6 py-4 text-sm font-medium border-b-2 transition-colors capitalize ${
+                className={cn("flex items-center gap-2 px-6 py-4 text-sm font-medium border-b-2 transition-colors capitalize",
                   activeTab === tab
-                    ? 'border-blue-600 text-blue-600 bg-blue-50/50'
-                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:bg-gray-50'
-                }`}
+                    ? "border-blue-600 text-blue-600 bg-blue-500/10"
+                    : cn("border-transparent", isDark ? "text-slate-400 hover:text-white hover:bg-slate-800" : "text-gray-500 hover:text-gray-700 hover:bg-gray-50"))}
               >
                 {tab === 'compose' && <MessageSquare size={18} />}
                 {tab === 'logs' && <Clock size={18} />}
@@ -204,24 +206,24 @@ export function SMSPage() {
         <div className="p-6">
           {activeTab === 'compose' && (
             <div className="max-w-2xl mx-auto">
-              <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl p-8">
-                <h3 className="text-lg font-semibold text-gray-900 mb-6">Quick Compose</h3>
+              <div className={cn("rounded-2xl p-8", isDark ? "bg-gradient-to-br from-blue-900/30 to-indigo-900/30" : "bg-gradient-to-br from-blue-50 to-indigo-50")}>
+                <h3 className={cn("text-lg font-semibold mb-6", isDark ? "text-white" : "text-gray-900")}>Quick Compose</h3>
                 <div className="space-y-5">
                   <div className="space-y-2">
-                    <label className="text-sm font-medium text-gray-700">Recipient Phone</label>
+                    <label className={cn("text-sm font-medium", isDark ? "text-slate-300" : "text-gray-700")}>Recipient Phone</label>
                     <input
                       type="text"
-                      className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+                      className={cn("w-full px-4 py-3 rounded-xl", input)}
                       placeholder="+256701234567"
                       value={formData.recipient}
                       onChange={(e) => setFormData({...formData, recipient: e.target.value})}
                     />
                   </div>
                   <div className="space-y-2">
-                    <label className="text-sm font-medium text-gray-700">Patient Name (Optional)</label>
+                    <label className={cn("text-sm font-medium", isDark ? "text-slate-300" : "text-gray-700")}>Patient Name (Optional)</label>
                     <input
                       type="text"
-                      className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+                      className={cn("w-full px-4 py-3 rounded-xl", input)}
                       placeholder="Search patient..."
                       value={formData.patient}
                       onChange={(e) => setFormData({...formData, patient: e.target.value})}
@@ -229,7 +231,7 @@ export function SMSPage() {
                   </div>
                   <div className="space-y-2">
                     <div className="flex items-center justify-between">
-                      <label className="text-sm font-medium text-gray-700">Message</label>
+                      <label className={cn("text-sm font-medium", isDark ? "text-slate-300" : "text-gray-700")}>Message</label>
                       <button
                         onClick={() => setShowTemplateModal(true)}
                         className="text-xs text-blue-600 hover:underline"
@@ -238,13 +240,13 @@ export function SMSPage() {
                       </button>
                     </div>
                     <textarea
-                      className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all resize-none"
+                      className={cn("w-full px-4 py-3 rounded-xl resize-none", input)}
                       rows={5}
                       placeholder="Type your message..."
                       value={formData.message}
                       onChange={(e) => setFormData({...formData, message: e.target.value})}
                     />
-                    <p className="text-xs text-gray-500 text-right">{formData.message.length}/160 characters</p>
+                    <p className={cn("text-xs text-right", textMuted)}>{formData.message.length}/160 characters</p>
                   </div>
                   <button
                     onClick={handleSend}
@@ -263,11 +265,11 @@ export function SMSPage() {
             <div className="space-y-4">
               <div className="flex flex-col sm:flex-row gap-4">
                 <div className="relative flex-1">
-                  <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
+                  <Search className={cn("absolute left-4 top-1/2 -translate-y-1/2", isDark ? "text-slate-500" : "text-gray-400")} size={20} />
                   <input
                     type="text"
                     placeholder="Search by phone or patient..."
-                    className="w-full pl-12 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+                    className={cn("w-full pl-12 pr-4 py-3 rounded-xl", input)}
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                   />
@@ -275,7 +277,7 @@ export function SMSPage() {
                 <select
                   value={statusFilter}
                   onChange={(e) => setStatusFilter(e.target.value)}
-                  className="px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                  className={cn("px-4 py-3 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500", isDark ? "bg-slate-800 border-slate-700 text-white" : "bg-gray-50 border-gray-200")}
                 >
                   <option value="all">All Status</option>
                   <option value="delivered">Delivered</option>
@@ -292,20 +294,20 @@ export function SMSPage() {
                     </div>
                   </div>
                 ) : filteredLogs.length === 0 ? (
-                  <div className="text-center py-12 text-gray-500">
+                  <div className={cn("text-center py-12", textMuted)}>
                     No SMS logs found
                   </div>
                 ) : (
                   filteredLogs.map((log) => (
-                    <div key={log.id} className="p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors">
+                    <div key={log.id} className={cn("p-4 rounded-xl transition-colors", isDark ? "bg-slate-800 hover:bg-slate-700" : "bg-gray-50 hover:bg-gray-100")}>
                       <div className="flex items-start justify-between mb-2">
                         <div className="flex items-center gap-3">
-                          <div className="h-10 w-10 rounded-xl bg-blue-100 flex items-center justify-center">
-                            <Phone size={18} className="text-blue-600" />
+                          <div className={cn("h-10 w-10 rounded-xl flex items-center justify-center", isDark ? "bg-blue-900/50" : "bg-blue-100")}>
+                            <Phone size={18} className={isDark ? "text-blue-400" : "text-blue-600"} />
                           </div>
                           <div>
-                            <p className="font-semibold text-gray-900">{log.patient}</p>
-                            <p className="text-sm text-gray-500">{log.recipient}</p>
+                            <p className={cn("font-semibold", isDark ? "text-white" : "text-gray-900")}>{log.patient}</p>
+                            <p className={cn("text-sm", textMuted)}>{log.recipient}</p>
                           </div>
                         </div>
                         <div className="flex items-center gap-2">
@@ -317,8 +319,8 @@ export function SMSPage() {
                           </span>
                         </div>
                       </div>
-                      <p className="text-sm text-gray-600 mb-2 ml-13">{log.message}</p>
-                      <div className="flex items-center justify-between text-xs text-gray-500">
+                      <p className={cn("text-sm mb-2 ml-13", isDark ? "text-slate-300" : "text-gray-600")}>{log.message}</p>
+                      <div className={cn("flex items-center justify-between text-xs", textMuted)}>
                         <span>Sent: {new Date(log.sentAt).toLocaleString()}</span>
                         {log.deliveredAt && <span>Delivered: {new Date(log.deliveredAt).toLocaleString()}</span>}
                       </div>
@@ -333,32 +335,32 @@ export function SMSPage() {
             <div className="space-y-4">
               {scheduledMessages.length === 0 ? (
                 <div className="text-center py-12">
-                  <Calendar size={48} className="mx-auto text-gray-300 mb-4" />
-                  <p className="text-gray-500">No scheduled messages</p>
+                  <Calendar size={48} className={cn("mx-auto mb-4", isDark ? "text-slate-600" : "text-gray-300")} />
+                  <p className={textMuted}>No scheduled messages</p>
                 </div>
               ) : (
                 scheduledMessages.map((msg) => (
-                  <div key={msg.id} className="p-4 bg-blue-50 rounded-xl border border-blue-100">
+                  <div key={msg.id} className={cn("p-4 rounded-xl border", isDark ? "bg-blue-900/20 border-blue-800" : "bg-blue-50 border-blue-100")}>
                     <div className="flex items-start justify-between mb-2">
                       <div>
-                        <p className="font-semibold text-gray-900">{msg.patient}</p>
-                        <p className="text-sm text-gray-500">{msg.recipient}</p>
+                        <p className={cn("font-semibold", isDark ? "text-white" : "text-gray-900")}>{msg.patient}</p>
+                        <p className={cn("text-sm", textMuted)}>{msg.recipient}</p>
                       </div>
-                      <span className="px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-700 capitalize">
+                      <span className={cn("px-2 py-1 rounded-full text-xs font-medium capitalize", isDark ? "bg-blue-900/50 text-blue-400" : "bg-blue-100 text-blue-700")}>
                         {msg.status}
                       </span>
                     </div>
-                    <p className="text-sm text-gray-600 mb-2">{msg.message}</p>
+                    <p className={cn("text-sm mb-2", isDark ? "text-slate-300" : "text-gray-600")}>{msg.message}</p>
                     <div className="flex items-center justify-between">
-                      <span className="text-xs text-gray-500">Scheduled: {new Date(msg.scheduledFor).toLocaleString()}</span>
+                      <span className={cn("text-xs", textMuted)}>Scheduled: {new Date(msg.scheduledFor).toLocaleString()}</span>
                       <div className="flex gap-2">
-                        <button className="p-1.5 text-blue-600 hover:bg-blue-100 rounded-lg transition-colors">
+                        <button className={cn("p-1.5 rounded-lg transition-colors", isDark ? "text-blue-400 hover:bg-blue-900/30" : "text-blue-600 hover:bg-blue-100")}>
                           <Play size={16} />
                         </button>
-                        <button className="p-1.5 text-yellow-600 hover:bg-yellow-100 rounded-lg transition-colors">
+                        <button className={cn("p-1.5 rounded-lg transition-colors", isDark ? "text-yellow-400 hover:bg-yellow-900/30" : "text-yellow-600 hover:bg-yellow-100")}>
                           <Pause size={16} />
                         </button>
-                        <button className="p-1.5 text-red-600 hover:bg-red-100 rounded-lg transition-colors">
+                        <button className={cn("p-1.5 rounded-lg transition-colors", isDark ? "text-red-400 hover:bg-red-900/30" : "text-red-600 hover:bg-red-100")}>
                           <Trash2 size={16} />
                         </button>
                       </div>
@@ -371,59 +373,59 @@ export function SMSPage() {
 
           {activeTab === 'settings' && (
             <div className="max-w-2xl mx-auto space-y-6">
-              <div className="bg-gray-50 rounded-2xl p-6">
-                <h3 className="font-semibold text-gray-900 mb-4">SMS Provider Settings</h3>
+              <div className={cn("rounded-2xl p-6", isDark ? "bg-slate-800" : "bg-gray-50")}>
+                <h3 className={cn("font-semibold mb-4", isDark ? "text-white" : "text-gray-900")}>SMS Provider Settings</h3>
                 <div className="space-y-4">
-                  <div className="flex items-center justify-between p-4 bg-white rounded-xl">
+                  <div className={cn("flex items-center justify-between p-4 rounded-xl", isDark ? "bg-slate-900" : "bg-white")}>
                     <div className="flex items-center gap-3">
                       <div className="h-10 w-10 rounded-lg bg-yellow-400 flex items-center justify-center text-white font-bold">
                         M
                       </div>
                       <div>
-                        <p className="font-medium text-gray-900">MTN Uganda</p>
-                        <p className="text-xs text-gray-500">Active</p>
+                        <p className={cn("font-medium", isDark ? "text-white" : "text-gray-900")}>MTN Uganda</p>
+                        <p className={cn("text-xs", textMuted)}>Active</p>
                       </div>
                     </div>
-                    <span className="px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-700">Connected</span>
+                    <span className={cn("px-2 py-1 rounded-full text-xs font-medium", isDark ? "bg-green-900/50 text-green-400" : "bg-green-100 text-green-700")}>Connected</span>
                   </div>
-                  <div className="flex items-center justify-between p-4 bg-white rounded-xl">
+                  <div className={cn("flex items-center justify-between p-4 rounded-xl", isDark ? "bg-slate-900" : "bg-white")}>
                     <div className="flex items-center gap-3">
                       <div className="h-10 w-10 rounded-lg bg-red-500 flex items-center justify-center text-white font-bold">
                         A
                       </div>
                       <div>
-                        <p className="font-medium text-gray-900">Airtel Uganda</p>
-                        <p className="text-xs text-gray-500">Not connected</p>
+                        <p className={cn("font-medium", isDark ? "text-white" : "text-gray-900")}>Airtel Uganda</p>
+                        <p className={cn("text-xs", textMuted)}>Not connected</p>
                       </div>
                     </div>
-                    <button className="px-3 py-1.5 text-sm text-blue-600 hover:bg-blue-50 rounded-lg transition-colors">
+                    <button className={cn("px-3 py-1.5 text-sm rounded-lg transition-colors", isDark ? "text-blue-400 hover:bg-blue-900/30" : "text-blue-600 hover:bg-blue-50")}>
                       Connect
                     </button>
                   </div>
                 </div>
               </div>
 
-              <div className="bg-gray-50 rounded-2xl p-6">
-                <h3 className="font-semibold text-gray-900 mb-4">Auto Reminders</h3>
+              <div className={cn("rounded-2xl p-6", isDark ? "bg-slate-800" : "bg-gray-50")}>
+                <h3 className={cn("font-semibold mb-4", isDark ? "text-white" : "text-gray-900")}>Auto Reminders</h3>
                 <div className="space-y-3">
-                  <label className="flex items-center justify-between p-4 bg-white rounded-xl cursor-pointer">
+                  <label className={cn("flex items-center justify-between p-4 rounded-xl cursor-pointer", isDark ? "bg-slate-900" : "bg-white")}>
                     <div className="flex items-center gap-3">
                       <Calendar size={20} className="text-blue-600" />
-                      <span className="text-gray-700">Appointment Reminders</span>
+                      <span className={isDark ? "text-slate-300" : "text-gray-700"}>Appointment Reminders</span>
                     </div>
                     <input type="checkbox" defaultChecked className="h-5 w-5 text-blue-600 rounded" />
                   </label>
-                  <label className="flex items-center justify-between p-4 bg-white rounded-xl cursor-pointer">
+                  <label className={cn("flex items-center justify-between p-4 rounded-xl cursor-pointer", isDark ? "bg-slate-900" : "bg-white")}>
                     <div className="flex items-center gap-3">
                       <AlertTriangle size={20} className="text-orange-600" />
-                      <span className="text-gray-700">Overdue Payment Alerts</span>
+                      <span className={isDark ? "text-slate-300" : "text-gray-700"}>Overdue Payment Alerts</span>
                     </div>
                     <input type="checkbox" defaultChecked className="h-5 w-5 text-blue-600 rounded" />
                   </label>
-                  <label className="flex items-center justify-between p-4 bg-white rounded-xl cursor-pointer">
+                  <label className={cn("flex items-center justify-between p-4 rounded-xl cursor-pointer", isDark ? "bg-slate-900" : "bg-white")}>
                     <div className="flex items-center gap-3">
                       <Bell size={20} className="text-purple-600" />
-                      <span className="text-gray-700">Lab Results Ready</span>
+                      <span className={isDark ? "text-slate-300" : "text-gray-700"}>Lab Results Ready</span>
                     </div>
                     <input type="checkbox" defaultChecked className="h-5 w-5 text-blue-600 rounded" />
                   </label>
@@ -436,28 +438,28 @@ export function SMSPage() {
 
       {showComposeModal && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4" onClick={() => setShowComposeModal(false)}>
-          <div className="bg-white rounded-2xl p-6 md:p-8 w-full max-w-lg shadow-2xl" onClick={e => e.stopPropagation()}>
+          <div className={cn("rounded-2xl p-6 md:p-8 w-full max-w-lg shadow-2xl", isDark ? "bg-slate-900" : "bg-white")} onClick={e => e.stopPropagation()}>
             <div className="flex justify-between items-center mb-6">
-              <h2 className="text-xl font-bold text-gray-900">Compose SMS</h2>
-              <button onClick={() => setShowComposeModal(false)} className="p-2 hover:bg-gray-100 rounded-xl transition-colors">
-                <XCircle size={20} className="text-gray-500" />
+              <h2 className={cn("text-xl font-bold", isDark ? "text-white" : "text-gray-900")}>Compose SMS</h2>
+              <button onClick={() => setShowComposeModal(false)} className={cn("p-2 rounded-xl transition-colors", isDark ? "hover:bg-slate-800" : "hover:bg-gray-100")}>
+                <XCircle size={20} className={textMuted} />
               </button>
             </div>
             <div className="space-y-5">
               <div className="space-y-2">
-                <label className="text-sm font-medium text-gray-700">Recipient</label>
+                <label className={cn("text-sm font-medium", isDark ? "text-slate-300" : "text-gray-700")}>Recipient</label>
                 <input
                   type="text"
-                  className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className={cn("w-full px-4 py-3 rounded-xl", input)}
                   placeholder="+256701234567"
                   value={formData.recipient}
                   onChange={(e) => setFormData({...formData, recipient: e.target.value})}
                 />
               </div>
               <div className="space-y-2">
-                <label className="text-sm font-medium text-gray-700">Type</label>
+                <label className={cn("text-sm font-medium", isDark ? "text-slate-300" : "text-gray-700")}>Type</label>
                 <select
-                  className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className={cn("w-full px-4 py-3 rounded-xl", input)}
                   value={formData.type}
                   onChange={(e) => setFormData({...formData, type: e.target.value})}
                 >
@@ -469,9 +471,9 @@ export function SMSPage() {
                 </select>
               </div>
               <div className="space-y-2">
-                <label className="text-sm font-medium text-gray-700">Message</label>
+                <label className={cn("text-sm font-medium", isDark ? "text-slate-300" : "text-gray-700")}>Message</label>
                 <textarea
-                  className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
+                  className={cn("w-full px-4 py-3 rounded-xl resize-none", input)}
                   rows={4}
                   placeholder="Type your message..."
                   value={formData.message}
@@ -486,7 +488,7 @@ export function SMSPage() {
                   <Send size={18} className="inline mr-2" />
                   Send Now
                 </button>
-                <button onClick={() => setShowComposeModal(false)} className="flex-1 px-4 py-3 border border-gray-200 text-gray-700 rounded-xl font-medium hover:bg-gray-50 transition-all">
+                <button onClick={() => setShowComposeModal(false)} className={cn("flex-1 px-4 py-3 rounded-xl font-medium transition-all", isDark ? "border border-slate-700 text-slate-300 hover:bg-slate-800" : "border border-gray-200 text-gray-700 hover:bg-gray-50")}>
                   Cancel
                 </button>
               </div>
@@ -497,11 +499,11 @@ export function SMSPage() {
 
       {showTemplateModal && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4" onClick={() => setShowTemplateModal(false)}>
-          <div className="bg-white rounded-2xl p-6 md:p-8 w-full max-w-lg shadow-2xl max-h-[80vh] overflow-y-auto" onClick={e => e.stopPropagation()}>
+          <div className={cn("rounded-2xl p-6 md:p-8 w-full max-w-lg shadow-2xl max-h-[80vh] overflow-y-auto", isDark ? "bg-slate-900" : "bg-white")} onClick={e => e.stopPropagation()}>
             <div className="flex justify-between items-center mb-6">
-              <h2 className="text-xl font-bold text-gray-900">SMS Templates</h2>
-              <button onClick={() => setShowTemplateModal(false)} className="p-2 hover:bg-gray-100 rounded-xl transition-colors">
-                <XCircle size={20} className="text-gray-500" />
+              <h2 className={cn("text-xl font-bold", isDark ? "text-white" : "text-gray-900")}>SMS Templates</h2>
+              <button onClick={() => setShowTemplateModal(false)} className={cn("p-2 rounded-xl transition-colors", isDark ? "hover:bg-slate-800" : "hover:bg-gray-100")}>
+                <XCircle size={20} className={textMuted} />
               </button>
             </div>
             <div className="space-y-3">
@@ -509,15 +511,15 @@ export function SMSPage() {
                 <div
                   key={template.id}
                   onClick={() => handleSelectTemplate(template)}
-                  className="p-4 bg-gray-50 rounded-xl cursor-pointer hover:bg-gray-100 transition-colors"
+                  className={cn("p-4 rounded-xl cursor-pointer transition-colors", isDark ? "bg-slate-800 hover:bg-slate-700" : "bg-gray-50 hover:bg-gray-100")}
                 >
                   <div className="flex items-center justify-between mb-2">
-                    <p className="font-semibold text-gray-900">{template.name}</p>
+                    <p className={cn("font-semibold", isDark ? "text-white" : "text-gray-900")}>{template.name}</p>
                     <span className={`px-2 py-1 rounded-full text-xs font-medium capitalize ${getTypeBadge(template.category)}`}>
                       {template.category}
                     </span>
                   </div>
-                  <p className="text-sm text-gray-600">{template.template}</p>
+                  <p className={cn("text-sm", isDark ? "text-slate-400" : "text-gray-600")}>{template.template}</p>
                 </div>
               ))}
             </div>

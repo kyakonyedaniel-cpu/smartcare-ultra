@@ -4,6 +4,8 @@ import {
   Search, Download, Printer, Eye, X, FileText,
   CreditCard, Banknote, TrendingUp
 } from 'lucide-react';
+import { useTheme } from '@/hooks/useTheme';
+import { cn } from '@/lib/utils';
 
 const mockInvoices = [
   { id: 'INV-001', invoiceNumber: 'INV-2026-001', patient: 'Sarah Nakato', patientId: '1', amount: 45000, paidAmount: 45000, status: 'paid', date: '2026-04-10', dueDate: '2026-04-17', items: [{ description: 'Consultation', quantity: 1, price: 25000 }, { description: 'Lab Test - CBC', quantity: 1, price: 20000 }] },
@@ -19,6 +21,7 @@ const formatCurrency = (amount) => {
 };
 
 export function InvoicesPage() {
+  const { isDark, input, textMuted, getBadge } = useTheme();
   const [invoices, setInvoices] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
@@ -126,8 +129,8 @@ export function InvoicesPage() {
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-2xl md:text-3xl font-bold text-gray-900">Invoices</h1>
-          <p className="text-gray-500 mt-1">Manage invoices and track payments</p>
+          <h1 className={cn("text-2xl md:text-3xl font-bold", isDark ? "text-white" : "text-gray-900")}>Invoices</h1>
+          <p className={cn(textMuted, "mt-1")}>Manage invoices and track payments</p>
         </div>
         <button
           onClick={() => setShowCreateModal(true)}
@@ -185,15 +188,15 @@ export function InvoicesPage() {
         </div>
       </div>
 
-      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-        <div className="p-4 md:p-6 border-b border-gray-100">
+      <div className={cn("rounded-2xl shadow-sm overflow-hidden", isDark ? "bg-slate-900 border-slate-800" : "bg-white border-gray-100")}>
+        <div className={cn("p-4 md:p-6 border-b", isDark ? "border-slate-800" : "border-gray-100")}>
           <div className="flex flex-col sm:flex-row gap-4">
             <div className="relative flex-1">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
+              <Search className={cn("absolute left-4 top-1/2 -translate-y-1/2", isDark ? "text-slate-500" : "text-gray-400")} size={20} />
               <input
                 type="text"
                 placeholder="Search by invoice # or patient..."
-                className="w-full pl-12 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                className={cn("w-full pl-12 pr-4 py-3 rounded-xl", input)}
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
@@ -201,7 +204,7 @@ export function InvoicesPage() {
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
-              className="px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+              className={cn("px-4 py-3 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500", isDark ? "bg-slate-800 border-slate-700 text-white" : "bg-gray-50 border-gray-200")}
             >
               <option value="all">All Status</option>
               <option value="paid">Paid</option>
@@ -214,18 +217,18 @@ export function InvoicesPage() {
 
         <div className="overflow-x-auto">
           <table className="w-full min-w-[900px]">
-            <thead className="bg-gray-50 sticky top-0">
+            <thead className={cn("sticky top-0", isDark ? "bg-slate-800" : "bg-gray-50")}>
               <tr>
-                <th className="text-left px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">Invoice</th>
-                <th className="text-left px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">Patient</th>
-                <th className="text-left px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">Date</th>
-                <th className="text-left px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">Due Date</th>
-                <th className="text-left px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">Amount</th>
-                <th className="text-left px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">Status</th>
-                <th className="text-left px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">Actions</th>
+                <th className={cn("text-left px-6 py-4 text-xs font-semibold uppercase tracking-wider", textMuted)}>Invoice</th>
+                <th className={cn("text-left px-6 py-4 text-xs font-semibold uppercase tracking-wider", textMuted)}>Patient</th>
+                <th className={cn("text-left px-6 py-4 text-xs font-semibold uppercase tracking-wider", textMuted)}>Date</th>
+                <th className={cn("text-left px-6 py-4 text-xs font-semibold uppercase tracking-wider", textMuted)}>Due Date</th>
+                <th className={cn("text-left px-6 py-4 text-xs font-semibold uppercase tracking-wider", textMuted)}>Amount</th>
+                <th className={cn("text-left px-6 py-4 text-xs font-semibold uppercase tracking-wider", textMuted)}>Status</th>
+                <th className={cn("text-left px-6 py-4 text-xs font-semibold uppercase tracking-wider", textMuted)}>Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-100">
+            <tbody className={cn("divide-y", isDark ? "divide-slate-800" : "divide-gray-100")}>
               {loading ? (
                 <tr>
                   <td colSpan="7" className="text-center py-12">
@@ -236,32 +239,32 @@ export function InvoicesPage() {
                 </tr>
               ) : filteredInvoices.length === 0 ? (
                 <tr>
-                  <td colSpan="7" className="text-center py-12 text-gray-500">
+                  <td colSpan="7" className={cn("text-center py-12", textMuted)}>
                     {searchTerm ? 'No invoices match your search.' : 'No invoices found.'}
                   </td>
                 </tr>
               ) : (
                 filteredInvoices.map((inv) => (
-                  <tr key={inv.id} className="hover:bg-gray-50 transition-colors">
+                  <tr key={inv.id} className={cn("transition-colors", isDark ? "hover:bg-slate-800" : "hover:bg-gray-50")}>
                     <td className="px-6 py-4">
-                      <p className="font-semibold text-gray-900">{inv.invoiceNumber}</p>
+                      <p className={cn("font-semibold", isDark ? "text-white" : "text-gray-900")}>{inv.invoiceNumber}</p>
                     </td>
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-3">
-                        <div className="h-8 w-8 rounded-lg bg-blue-100 flex items-center justify-center">
-                          <span className="text-blue-600 font-semibold text-sm">
+                        <div className={cn("h-8 w-8 rounded-lg flex items-center justify-center", isDark ? "bg-blue-900/50" : "bg-blue-100")}>
+                          <span className={cn("font-semibold text-sm", isDark ? "text-blue-400" : "text-blue-600")}>
                             {inv.patient.split(' ').map(n => n[0]).join('')}
                           </span>
                         </div>
-                        <span className="font-medium text-gray-900">{inv.patient}</span>
+                        <span className={cn("font-medium", isDark ? "text-white" : "text-gray-900")}>{inv.patient}</span>
                       </div>
                     </td>
-                    <td className="px-6 py-4 text-gray-600">{new Date(inv.date).toLocaleDateString()}</td>
-                    <td className="px-6 py-4 text-gray-600">{new Date(inv.dueDate).toLocaleDateString()}</td>
+                    <td className={cn("px-6 py-4", isDark ? "text-slate-400" : "text-gray-600")}>{new Date(inv.date).toLocaleDateString()}</td>
+                    <td className={cn("px-6 py-4", isDark ? "text-slate-400" : "text-gray-600")}>{new Date(inv.dueDate).toLocaleDateString()}</td>
                     <td className="px-6 py-4">
-                      <p className="font-semibold text-gray-900">{formatCurrency(inv.amount)}</p>
+                      <p className={cn("font-semibold", isDark ? "text-white" : "text-gray-900")}>{formatCurrency(inv.amount)}</p>
                       {inv.paidAmount > 0 && inv.paidAmount < inv.amount && (
-                        <p className="text-xs text-gray-500">Paid: {formatCurrency(inv.paidAmount)}</p>
+                        <p className={cn("text-xs", textMuted)}>Paid: {formatCurrency(inv.paidAmount)}</p>
                       )}
                     </td>
                     <td className="px-6 py-4">
@@ -273,21 +276,21 @@ export function InvoicesPage() {
                       <div className="flex items-center gap-2">
                         <button
                           onClick={() => setSelectedInvoice(inv)}
-                          className="p-2 text-gray-500 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                          className={cn("p-2 rounded-lg transition-colors", isDark ? "text-slate-400 hover:text-blue-400 hover:bg-blue-900/30" : "text-gray-500 hover:text-blue-600 hover:bg-blue-50")}
                           title="View Invoice"
                         >
                           <Eye size={18} />
                         </button>
                         <button
                           onClick={() => { setSelectedInvoice(inv); setTimeout(handlePrint, 100); }}
-                          className="p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
+                          className={cn("p-2 rounded-lg transition-colors", isDark ? "text-slate-400 hover:text-white hover:bg-slate-700" : "text-gray-500 hover:text-gray-700 hover:bg-gray-100")}
                           title="Print"
                         >
                           <Printer size={18} />
                         </button>
                         <button
                           onClick={() => { setSelectedInvoice(inv); setTimeout(handleDownload, 100); }}
-                          className="p-2 text-gray-500 hover:text-green-600 hover:bg-green-50 rounded-lg transition-colors"
+                          className={cn("p-2 rounded-lg transition-colors", isDark ? "text-slate-400 hover:text-green-400 hover:bg-green-900/30" : "text-gray-500 hover:text-green-600 hover:bg-green-50")}
                           title="Download"
                         >
                           <Download size={18} />
@@ -304,44 +307,44 @@ export function InvoicesPage() {
 
       {selectedInvoice && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4 overflow-y-auto" onClick={() => setSelectedInvoice(null)}>
-          <div className="bg-white rounded-2xl w-full max-w-2xl shadow-2xl my-8" onClick={e => e.stopPropagation()}>
+          <div className={cn("rounded-2xl w-full max-w-2xl shadow-2xl my-8", isDark ? "bg-slate-900" : "bg-white")} onClick={e => e.stopPropagation()}>
             <div ref={printRef} className="p-8">
               <div className="flex justify-between items-start mb-8">
                 <div>
                   <h1 className="text-2xl font-bold text-blue-600">SmartCare Clinic</h1>
-                  <p className="text-gray-500 text-sm mt-1">Kampala, Uganda</p>
-                  <p className="text-gray-500 text-sm">+256 700 123 456</p>
+                  <p className={cn("text-sm mt-1", textMuted)}>Kampala, Uganda</p>
+                  <p className={cn("text-sm", textMuted)}>+256 700 123 456</p>
                 </div>
                 <div className="text-right">
-                  <h2 className="text-xl font-bold text-gray-900">INVOICE</h2>
-                  <p className="text-gray-600 mt-1">{selectedInvoice.invoiceNumber}</p>
-                  <p className="text-sm text-gray-500">Date: {new Date(selectedInvoice.date).toLocaleDateString()}</p>
-                  <p className="text-sm text-gray-500">Due: {new Date(selectedInvoice.dueDate).toLocaleDateString()}</p>
+                  <h2 className={cn("text-xl font-bold", isDark ? "text-white" : "text-gray-900")}>INVOICE</h2>
+                  <p className={isDark ? "text-slate-400 mt-1" : "text-gray-600 mt-1"}>{selectedInvoice.invoiceNumber}</p>
+                  <p className={cn("text-sm", textMuted)}>Date: {new Date(selectedInvoice.date).toLocaleDateString()}</p>
+                  <p className={cn("text-sm", textMuted)}>Due: {new Date(selectedInvoice.dueDate).toLocaleDateString()}</p>
                 </div>
               </div>
 
-              <div className="bg-gray-50 rounded-xl p-4 mb-6">
-                <p className="text-xs text-gray-500 uppercase tracking-wider mb-2">Bill To</p>
-                <p className="font-semibold text-gray-900">{selectedInvoice.patient}</p>
-                <p className="text-sm text-gray-600">Patient ID: {selectedInvoice.patientId}</p>
+              <div className={cn("rounded-xl p-4 mb-6", isDark ? "bg-slate-800" : "bg-gray-50")}>
+                <p className={cn("text-xs uppercase tracking-wider mb-2", textMuted)}>Bill To</p>
+                <p className={cn("font-semibold", isDark ? "text-white" : "text-gray-900")}>{selectedInvoice.patient}</p>
+                <p className={isDark ? "text-sm text-slate-400" : "text-sm text-gray-600"}>Patient ID: {selectedInvoice.patientId}</p>
               </div>
 
               <table className="w-full mb-6">
                 <thead>
-                  <tr className="border-b border-gray-200">
-                    <th className="text-left py-3 text-xs font-semibold text-gray-500 uppercase">Description</th>
-                    <th className="text-center py-3 text-xs font-semibold text-gray-500 uppercase">Qty</th>
-                    <th className="text-right py-3 text-xs font-semibold text-gray-500 uppercase">Price</th>
-                    <th className="text-right py-3 text-xs font-semibold text-gray-500 uppercase">Total</th>
+                  <tr className={cn("border-b", isDark ? "border-slate-700" : "border-gray-200")}>
+                    <th className={cn("text-left py-3 text-xs font-semibold uppercase", textMuted)}>Description</th>
+                    <th className={cn("text-center py-3 text-xs font-semibold uppercase", textMuted)}>Qty</th>
+                    <th className={cn("text-right py-3 text-xs font-semibold uppercase", textMuted)}>Price</th>
+                    <th className={cn("text-right py-3 text-xs font-semibold uppercase", textMuted)}>Total</th>
                   </tr>
                 </thead>
                 <tbody>
                   {selectedInvoice.items.map((item, i) => (
-                    <tr key={i} className="border-b border-gray-100">
-                      <td className="py-3 text-gray-900">{item.description}</td>
-                      <td className="py-3 text-center text-gray-600">{item.quantity}</td>
-                      <td className="py-3 text-right text-gray-600">{formatCurrency(item.price)}</td>
-                      <td className="py-3 text-right font-medium text-gray-900">{formatCurrency(item.price * item.quantity)}</td>
+                    <tr key={i} className={cn("border-b", isDark ? "border-slate-800" : "border-gray-100")}>
+                      <td className={cn("py-3", isDark ? "text-white" : "text-gray-900")}>{item.description}</td>
+                      <td className={cn("py-3 text-center", isDark ? "text-slate-400" : "text-gray-600")}>{item.quantity}</td>
+                      <td className={cn("py-3 text-right", isDark ? "text-slate-400" : "text-gray-600")}>{formatCurrency(item.price)}</td>
+                      <td className={cn("py-3 text-right font-medium", isDark ? "text-white" : "text-gray-900")}>{formatCurrency(item.price * item.quantity)}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -349,13 +352,13 @@ export function InvoicesPage() {
 
               <div className="flex justify-end mb-8">
                 <div className="w-64">
-                  <div className="flex justify-between py-2 border-b border-gray-100">
-                    <span className="text-gray-600">Subtotal</span>
-                    <span className="font-medium text-gray-900">{formatCurrency(selectedInvoice.amount)}</span>
+                  <div className={cn("flex justify-between py-2 border-b", isDark ? "border-slate-800" : "border-gray-100")}>
+                    <span className={isDark ? "text-slate-400" : "text-gray-600"}>Subtotal</span>
+                    <span className={cn("font-medium", isDark ? "text-white" : "text-gray-900")}>{formatCurrency(selectedInvoice.amount)}</span>
                   </div>
                   {selectedInvoice.paidAmount > 0 && (
-                    <div className="flex justify-between py-2 border-b border-gray-100">
-                      <span className="text-gray-600">Paid</span>
+                    <div className={cn("flex justify-between py-2 border-b", isDark ? "border-slate-800" : "border-gray-100")}>
+                      <span className={isDark ? "text-slate-400" : "text-gray-600"}>Paid</span>
                       <span className="font-medium text-green-600">-{formatCurrency(selectedInvoice.paidAmount)}</span>
                     </div>
                   )}
@@ -368,15 +371,15 @@ export function InvoicesPage() {
                 </div>
               </div>
 
-              <div className="bg-blue-50 rounded-xl p-4 text-center">
-                <p className="text-sm text-blue-800">
+              <div className={cn("rounded-xl p-4 text-center", isDark ? "bg-blue-900/30" : "bg-blue-50")}>
+                <p className={isDark ? "text-sm text-blue-300" : "text-sm text-blue-800"}>
                   Payment accepted via Cash, Mobile Money (MTN/Airtel), or Credit Card
                 </p>
-                <p className="text-xs text-blue-600 mt-1">Thank you for choosing SmartCare Clinic</p>
+                <p className={isDark ? "text-xs text-blue-400 mt-1" : "text-xs text-blue-600 mt-1"}>Thank you for choosing SmartCare Clinic</p>
               </div>
             </div>
 
-            <div className="p-6 border-t border-gray-100 flex gap-3">
+            <div className={cn("p-6 border-t flex gap-3", isDark ? "border-slate-800" : "border-gray-100")}>
               <button
                 onClick={handlePrint}
                 className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-blue-600 text-white rounded-xl font-medium hover:bg-blue-700 transition-all"
@@ -386,7 +389,7 @@ export function InvoicesPage() {
               </button>
               <button
                 onClick={handleDownload}
-                className="flex-1 flex items-center justify-center gap-2 px-4 py-3 border border-gray-200 text-gray-700 rounded-xl font-medium hover:bg-gray-50 transition-all"
+                className={cn("flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-xl font-medium transition-all", isDark ? "border border-slate-700 text-slate-300 hover:bg-slate-800" : "border border-gray-200 text-gray-700 hover:bg-gray-50")}
               >
                 <Download size={18} />
                 Download
@@ -406,29 +409,29 @@ export function InvoicesPage() {
 
       {showCreateModal && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4" onClick={() => setShowCreateModal(false)}>
-          <div className="bg-white rounded-2xl p-6 md:p-8 w-full max-w-lg shadow-2xl" onClick={e => e.stopPropagation()}>
+          <div className={cn("rounded-2xl p-6 md:p-8 w-full max-w-lg shadow-2xl", isDark ? "bg-slate-900" : "bg-white")} onClick={e => e.stopPropagation()}>
             <div className="flex justify-between items-center mb-6">
               <div>
-                <h2 className="text-xl font-bold text-gray-900">Create Invoice</h2>
-                <p className="text-sm text-gray-500 mt-1">Generate a new invoice for a patient</p>
+                <h2 className={cn("text-xl font-bold", isDark ? "text-white" : "text-gray-900")}>Create Invoice</h2>
+                <p className={cn("text-sm mt-1", textMuted)}>Generate a new invoice for a patient</p>
               </div>
-              <button onClick={() => setShowCreateModal(false)} className="p-2 hover:bg-gray-100 rounded-xl transition-colors">
-                <X size={20} className="text-gray-500" />
+              <button onClick={() => setShowCreateModal(false)} className={cn("p-2 rounded-xl transition-colors", isDark ? "hover:bg-slate-800" : "hover:bg-gray-100")}>
+                <X size={20} className={textMuted} />
               </button>
             </div>
             <form className="space-y-5">
               <div className="space-y-2">
-                <label className="text-sm font-medium text-gray-700">Patient</label>
+                <label className={cn("text-sm font-medium", isDark ? "text-slate-300" : "text-gray-700")}>Patient</label>
                 <input
                   type="text"
                   placeholder="Search patient..."
-                  className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+                  className={cn("w-full px-4 py-3 rounded-xl", input)}
                 />
               </div>
               <div className="space-y-2">
-                <label className="text-sm font-medium text-gray-700">Services/Items</label>
+                <label className={cn("text-sm font-medium", isDark ? "text-slate-300" : "text-gray-700")}>Services/Items</label>
                 <textarea
-                  className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all resize-none"
+                  className={cn("w-full px-4 py-3 rounded-xl resize-none", input)}
                   rows={4}
                   placeholder="List services or items..."
                 />
@@ -437,7 +440,7 @@ export function InvoicesPage() {
                 <button type="button" className="flex-1 px-4 py-3 bg-blue-600 text-white rounded-xl font-medium hover:bg-blue-700 transition-all">
                   Create Invoice
                 </button>
-                <button type="button" onClick={() => setShowCreateModal(false)} className="flex-1 px-4 py-3 border border-gray-200 text-gray-700 rounded-xl font-medium hover:bg-gray-50 transition-all">
+                <button type="button" onClick={() => setShowCreateModal(false)} className={cn("flex-1 px-4 py-3 rounded-xl font-medium transition-all", isDark ? "border border-slate-700 text-slate-300 hover:bg-slate-800" : "border border-gray-200 text-gray-700 hover:bg-gray-50")}>
                   Cancel
                 </button>
               </div>

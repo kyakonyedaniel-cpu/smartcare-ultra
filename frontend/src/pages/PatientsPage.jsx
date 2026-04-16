@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Search, Plus, X, Eye, ChevronLeft, ChevronRight, User } from 'lucide-react';
+import { useTheme } from '@/hooks/useTheme';
+import { cn } from '@/lib/utils';
+import { Search, Plus, X, Eye, User } from 'lucide-react';
 
 const mockPatients = [
   { id: '1', patientNumber: 'PT-001', firstName: 'Sarah', lastName: 'Nakato', gender: 'FEMALE', phone: '+256701234567', email: 'sarah@email.com', address: 'Kampala', createdAt: '2026-04-01' },
@@ -15,6 +17,7 @@ const mockPatients = [
 
 export function PatientsPage() {
   const navigate = useNavigate();
+  const { isDark, card, input, textMuted, tableHead, tableRow, tableCell, getBadge } = useTheme();
   const [patients, setPatients] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showAddModal, setShowAddModal] = useState(false);
@@ -67,8 +70,8 @@ export function PatientsPage() {
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-2xl md:text-3xl font-bold text-gray-900">Patients</h1>
-          <p className="text-gray-500 mt-1">{filteredPatients.length} total patients</p>
+          <h1 className={cn("text-2xl md:text-3xl font-bold", isDark ? "text-white" : "text-gray-900")}>Patients</h1>
+          <p className={cn("mt-1", textMuted)}>{filteredPatients.length} total patients</p>
         </div>
         <button
           onClick={() => setShowAddModal(true)}
@@ -79,20 +82,20 @@ export function PatientsPage() {
         </button>
       </div>
 
-      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-        <div className="p-4 md:p-6 border-b border-gray-100">
+      <div className={cn("rounded-2xl shadow-sm border overflow-hidden", card)}>
+        <div className={cn("p-4 md:p-6 border-b", isDark ? "border-slate-800" : "border-gray-100")}>
           <div className="flex flex-col sm:flex-row gap-4">
             <div className="relative flex-1">
               <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
               <input
                 type="text"
                 placeholder="Search by name, patient number, or phone..."
-                className="w-full pl-12 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                className={cn("w-full pl-12 pr-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all", input)}
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
             </div>
-            <select className="px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm">
+            <select className={cn("px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm", input)}>
               <option>All Genders</option>
               <option>Male</option>
               <option>Female</option>
@@ -102,15 +105,15 @@ export function PatientsPage() {
 
         <div className="overflow-x-auto">
           <table className="w-full min-w-[800px]">
-            <thead className="bg-gray-50 sticky top-0">
+            <thead className={cn("sticky top-0", tableHead)}>
               <tr>
-                <th className="text-left px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">Patient</th>
-                <th className="text-left px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">Gender</th>
-                <th className="text-left px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">Phone</th>
-                <th className="text-left px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">Email</th>
-                <th className="text-left px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">Address</th>
-                <th className="text-left px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">Registered</th>
-                <th className="text-left px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">Actions</th>
+                <th className={cn("text-left px-6 py-4 text-xs font-semibold uppercase tracking-wider", textMuted)}>Patient</th>
+                <th className={cn("text-left px-6 py-4 text-xs font-semibold uppercase tracking-wider", textMuted)}>Gender</th>
+                <th className={cn("text-left px-6 py-4 text-xs font-semibold uppercase tracking-wider", textMuted)}>Phone</th>
+                <th className={cn("text-left px-6 py-4 text-xs font-semibold uppercase tracking-wider", textMuted)}>Email</th>
+                <th className={cn("text-left px-6 py-4 text-xs font-semibold uppercase tracking-wider", textMuted)}>Address</th>
+                <th className={cn("text-left px-6 py-4 text-xs font-semibold uppercase tracking-wider", textMuted)}>Registered</th>
+                <th className={cn("text-left px-6 py-4 text-xs font-semibold uppercase tracking-wider", textMuted)}>Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100">
@@ -124,13 +127,13 @@ export function PatientsPage() {
                 </tr>
               ) : filteredPatients.length === 0 ? (
                 <tr>
-                  <td colSpan="7" className="text-center py-12 text-gray-500">
+                  <td colSpan="7"Name={cn("text-center py-12", textMuted)}>
                     {searchTerm ? 'No patients match your search.' : 'No patients found. Add your first patient!'}
                   </td>
                 </tr>
               ) : (
                 filteredPatients.map((patient) => (
-                  <tr key={patient.id} className="hover:bg-gray-50 transition-colors">
+                  <tr key={patient.id} className={cn("transition-colors", tableRow)}>
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-4">
                         <div className={`h-10 w-10 rounded-xl flex items-center justify-center text-white font-bold text-sm shadow ${
@@ -139,26 +142,26 @@ export function PatientsPage() {
                           {patient.firstName[0]}{patient.lastName[0]}
                         </div>
                         <div>
-                          <p className="font-semibold text-gray-900">{patient.firstName} {patient.lastName}</p>
-                          <p className="text-sm text-gray-500">{patient.patientNumber}</p>
+                          <p className={cn("font-semibold", isDark ? "text-white" : "text-gray-900")}>{patient.firstName} {patient.lastName}</p>
+                          <p className={cn("text-sm", textMuted)}>{patient.patientNumber}</p>
                         </div>
                       </div>
                     </td>
                     <td className="px-6 py-4">
                       <span className={`inline-flex text-xs font-medium px-2.5 py-1 rounded-full ${
-                        patient.gender === 'MALE' ? 'bg-blue-100 text-blue-700' : 'bg-pink-100 text-pink-700'
+                        patient.gender === 'MALE' ? (isDark ? 'bg-blue-900/50 text-blue-400' : 'bg-blue-100 text-blue-700') : (isDark ? 'bg-pink-900/50 text-pink-400' : 'bg-pink-100 text-pink-700')
                       }`}>
                         {patient.gender}
                       </span>
                     </td>
-                    <td className="px-6 py-4 text-gray-600">{patient.phone || '-'}</td>
-                    <td className="px-6 py-4 text-gray-600">{patient.email || '-'}</td>
-                    <td className="px-6 py-4 text-gray-600">{patient.address || '-'}</td>
-                    <td className="px-6 py-4 text-gray-600">{patient.createdAt ? new Date(patient.createdAt).toLocaleDateString() : '-'}</td>
+                    <td className={cn("px-6 py-4", tableCell)}>{patient.phone || '-'}</td>
+                    <td className={cn("px-6 py-4", tableCell)}>{patient.email || '-'}</td>
+                    <td className={cn("px-6 py-4", tableCell)}>{patient.address || '-'}</td>
+                    <td className={cn("px-6 py-4", tableCell)}>{patient.createdAt ? new Date(patient.createdAt).toLocaleDateString() : '-'}</td>
                     <td className="px-6 py-4">
                       <button
                         onClick={() => viewPatient(patient)}
-                        className="inline-flex items-center gap-1 px-3 py-1.5 text-sm font-medium text-blue-600 bg-blue-50 rounded-lg hover:bg-blue-100 transition-colors"
+                        className={cn("inline-flex items-center gap-1 px-3 py-1.5 text-sm font-medium rounded-lg transition-colors", isDark ? "text-blue-400 bg-blue-900/30 hover:bg-blue-900/50" : "text-blue-600 bg-blue-50 hover:bg-blue-100")}
                       >
                         <Eye size={16} />
                         View
@@ -174,33 +177,33 @@ export function PatientsPage() {
 
       {showAddModal && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4" onClick={() => setShowAddModal(false)}>
-          <div className="bg-white rounded-2xl p-6 md:p-8 w-full max-w-lg shadow-2xl" onClick={e => e.stopPropagation()}>
+          <div className={cn("rounded-2xl p-6 md:p-8 w-full max-w-lg shadow-2xl", isDark ? "bg-slate-900" : "bg-white")} onClick={e => e.stopPropagation()}>
             <div className="flex justify-between items-center mb-6">
               <div>
-                <h2 className="text-xl font-bold text-gray-900">Add New Patient</h2>
-                <p className="text-sm text-gray-500 mt-1">Fill in the patient details below</p>
+                <h2 className={cn("text-xl font-bold", isDark ? "text-white" : "text-gray-900")}>Add New Patient</h2>
+                <p className={cn("text-sm mt-1", textMuted)}>Fill in the patient details below</p>
               </div>
-              <button onClick={() => setShowAddModal(false)} className="p-2 hover:bg-gray-100 rounded-xl transition-colors">
-                <X size={20} className="text-gray-500" />
+              <button onClick={() => setShowAddModal(false)} className={cn("p-2 rounded-xl transition-colors", isDark ? "hover:bg-slate-800" : "hover:bg-gray-100")}>
+                <X size={20} className={textMuted} />
               </button>
             </div>
             <form onSubmit={handleSubmit} className="space-y-5">
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <label className="text-sm font-medium text-gray-700">First Name</label>
+                  <label className={cn("text-sm font-medium", isDark ? "text-slate-300" : "text-gray-700")}>First Name</label>
                   <input
                     type="text"
-                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+                    className={cn("w-full px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all", input)}
                     value={formData.firstName}
                     onChange={e => setFormData({...formData, firstName: e.target.value})}
                     required
                   />
                 </div>
                 <div className="space-y-2">
-                  <label className="text-sm font-medium text-gray-700">Last Name</label>
+                  <label className={cn("text-sm font-medium", isDark ? "text-slate-300" : "text-gray-700")}>Last Name</label>
                   <input
                     type="text"
-                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+                    className={cn("w-full px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all", input)}
                     value={formData.lastName}
                     onChange={e => setFormData({...formData, lastName: e.target.value})}
                     required
@@ -208,9 +211,9 @@ export function PatientsPage() {
                 </div>
               </div>
               <div className="space-y-2">
-                <label className="text-sm font-medium text-gray-700">Gender</label>
+                <label className={cn("text-sm font-medium", isDark ? "text-slate-300" : "text-gray-700")}>Gender</label>
                 <select
-                  className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+                  className={cn("w-full px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all", input)}
                   value={formData.gender}
                   onChange={e => setFormData({...formData, gender: e.target.value})}
                 >
@@ -220,29 +223,29 @@ export function PatientsPage() {
                 </select>
               </div>
               <div className="space-y-2">
-                <label className="text-sm font-medium text-gray-700">Phone</label>
+                <label className={cn("text-sm font-medium", isDark ? "text-slate-300" : "text-gray-700")}>Phone</label>
                 <input
                   type="text"
-                  className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+                  className={cn("w-full px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all", input)}
                   value={formData.phone}
                   onChange={e => setFormData({...formData, phone: e.target.value})}
                   placeholder="+256..."
                 />
               </div>
               <div className="space-y-2">
-                <label className="text-sm font-medium text-gray-700">Email</label>
+                <label className={cn("text-sm font-medium", isDark ? "text-slate-300" : "text-gray-700")}>Email</label>
                 <input
                   type="email"
-                  className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+                  className={cn("w-full px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all", input)}
                   value={formData.email}
                   onChange={e => setFormData({...formData, email: e.target.value})}
                 />
               </div>
               <div className="space-y-2">
-                <label className="text-sm font-medium text-gray-700">Address</label>
+                <label className={cn("text-sm font-medium", isDark ? "text-slate-300" : "text-gray-700")}>Address</label>
                 <input
                   type="text"
-                  className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+                  className={cn("w-full px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all", input)}
                   value={formData.address}
                   onChange={e => setFormData({...formData, address: e.target.value})}
                 />
@@ -251,7 +254,7 @@ export function PatientsPage() {
                 <button type="submit" className="flex-1 px-4 py-3 bg-blue-600 text-white rounded-xl font-medium hover:bg-blue-700 transition-all shadow-lg shadow-blue-600/25">
                   Add Patient
                 </button>
-                <button type="button" onClick={() => setShowAddModal(false)} className="flex-1 px-4 py-3 border border-gray-200 text-gray-700 rounded-xl font-medium hover:bg-gray-50 transition-all">
+                <button type="button" onClick={() => setShowAddModal(false)} className={cn("flex-1 px-4 py-3 rounded-xl font-medium transition-all border", isDark ? "border-slate-700 text-slate-300 hover:bg-slate-800" : "border-gray-200 text-gray-700 hover:bg-gray-50")}>
                   Cancel
                 </button>
               </div>
