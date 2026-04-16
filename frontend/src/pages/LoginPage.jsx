@@ -11,6 +11,7 @@ import { Building2 } from 'lucide-react';
 export function LoginPage() {
   const location = useLocation();
   const isRegister = location.pathname === '/register';
+  const successMessage = location.state?.message;
   
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -18,6 +19,7 @@ export function LoginPage() {
   const [phone, setPhone] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [success, setSuccess] = useState(successMessage || '');
   const navigate = useNavigate();
   const { setAuth } = useAuthStore();
 
@@ -45,11 +47,8 @@ export function LoginPage() {
 
     try {
       const { data } = await auth.register({ clinicName, email, password, phone });
-      if (data.token) {
-        const loginData = await auth.login({ email, password });
-        setAuth(loginData.data.user, loginData.data.token, loginData.data.user.tenant);
-        localStorage.setItem('token', loginData.data.token);
-        navigate('/dashboard');
+      if (data.message) {
+        navigate('/login', { state: { message: 'Account created! Please sign in.' } });
       }
     } catch (err) {
       setError(err.response?.data?.error || 'Registration failed');
@@ -81,6 +80,11 @@ export function LoginPage() {
               {error && (
                 <div className="p-3 text-sm text-red-600 bg-red-50 rounded-md">
                   {error}
+                </div>
+              )}
+              {success && (
+                <div className="p-3 text-sm text-green-600 bg-green-50 rounded-md">
+                  {success}
                 </div>
               )}
               
