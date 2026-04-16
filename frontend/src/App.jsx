@@ -13,6 +13,7 @@ import { PatientsPage } from '@/pages/PatientsPage';
 import { PatientProfilePage } from '@/pages/PatientProfilePage';
 import { DoctorPage } from '@/pages/DoctorPage';
 import { PharmacyPage } from '@/pages/PharmacyPage';
+import { LabPage } from '@/pages/LabPage';
 import { POSPage } from '@/pages/POSPage';
 import { AppointmentsPage } from '@/pages/AppointmentsPage';
 import { InvoicesPage } from '@/pages/InvoicesPage';
@@ -52,6 +53,7 @@ function App() {
             <Route path="/patients/:id" element={<PrivateRoute><PatientProfilePage /></PrivateRoute>} />
             <Route path="/doctor" element={<PrivateRoute><DoctorPage /></PrivateRoute>} />
             <Route path="/pharmacy" element={<PrivateRoute><PharmacyPage /></PrivateRoute>} />
+            <Route path="/lab" element={<PrivateRoute><LabPage /></PrivateRoute>} />
             <Route path="/pos" element={<PrivateRoute><POSPage /></PrivateRoute>} />
             <Route path="/appointments" element={<PrivateRoute><AppointmentsPage /></PrivateRoute>} />
             <Route path="/invoices" element={<PrivateRoute><InvoicesPage /></PrivateRoute>} />

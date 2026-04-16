@@ -6,7 +6,7 @@ import {
   LayoutDashboard, Users, UserCheck, Stethoscope, Pill, 
   ShoppingCart, Calendar, Receipt, FileText, TrendingUp, 
   MessageSquare, Settings, Menu, X, Building2, CreditCard, Shield,
-  Bell, Search, Sun, Moon, TestTube, DollarSign, AlertCircle
+  Bell, Search, Sun, Moon, TestTube, DollarSign, AlertCircle, FlaskConical
 } from 'lucide-react';
 
 const menuItems = [
@@ -14,6 +14,7 @@ const menuItems = [
   { icon: UserCheck, label: 'Patients', path: '/patients' },
   { icon: Stethoscope, label: 'Doctor', path: '/doctor' },
   { icon: Pill, label: 'Pharmacy', path: '/pharmacy' },
+  { icon: FlaskConical, label: 'Lab', path: '/lab' },
   { icon: ShoppingCart, label: 'POS', path: '/pos' },
   { icon: Calendar, label: 'Appointments', path: '/appointments' },
   { icon: Receipt, label: 'Invoices', path: '/invoices' },
