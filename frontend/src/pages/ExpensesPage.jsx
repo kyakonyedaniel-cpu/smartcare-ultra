@@ -5,17 +5,27 @@ import { cn } from '@/lib/utils';
 
 const CATEGORIES = ['Rent', 'Salaries', 'Utilities', 'Supplies', 'Drug Stock', 'Transport', 'Maintenance', 'Other'];
 
+// Dates are relative to today so "This Month" always reflects the current month.
+const TODAY = new Date();
+const isoDate = (d) => d.toISOString().slice(0, 10);
+const daysAgo = (n) => {
+  const d = new Date(TODAY);
+  d.setDate(Math.max(1, TODAY.getDate() - Math.min(n, TODAY.getDate() - 1)));
+  return isoDate(d);
+};
+const lastMonthDay = (day) => isoDate(new Date(TODAY.getFullYear(), TODAY.getMonth() - 1, day));
+
 const initialExpenses = [
-  { id: '1', date: '2026-04-14', description: 'Monthly clinic rent', category: 'Rent', amount: 350000, paidBy: 'Cash' },
-  { id: '2', date: '2026-04-12', description: 'Nurse & reception salaries', category: 'Salaries', amount: 280000, paidBy: 'Bank' },
-  { id: '3', date: '2026-04-10', description: 'UMEME electricity bill', category: 'Utilities', amount: 65000, paidBy: 'MTN MoMo' },
-  { id: '4', date: '2026-04-09', description: 'Gloves, syringes, cotton', category: 'Supplies', amount: 85000, paidBy: 'Cash' },
-  { id: '5', date: '2026-04-07', description: 'Amoxicillin restock (200 units)', category: 'Drug Stock', amount: 140000, paidBy: 'Bank' },
-  { id: '6', date: '2026-04-05', description: 'Boda delivery of supplies', category: 'Transport', amount: 25000, paidBy: 'Cash' },
-  { id: '7', date: '2026-04-03', description: 'Generator servicing', category: 'Maintenance', amount: 90000, paidBy: 'Cash' },
-  { id: '8', date: '2026-03-28', description: 'March clinic rent', category: 'Rent', amount: 350000, paidBy: 'Cash' },
-  { id: '9', date: '2026-03-24', description: 'March salaries', category: 'Salaries', amount: 280000, paidBy: 'Bank' },
-  { id: '10', date: '2026-03-15', description: 'Water bill', category: 'Utilities', amount: 45000, paidBy: 'Cash' },
+  { id: '1', date: daysAgo(1), description: 'Monthly clinic rent', category: 'Rent', amount: 350000, paidBy: 'Cash' },
+  { id: '2', date: daysAgo(2), description: 'Nurse & reception salaries', category: 'Salaries', amount: 280000, paidBy: 'Bank' },
+  { id: '3', date: daysAgo(3), description: 'UMEME electricity bill', category: 'Utilities', amount: 65000, paidBy: 'MTN MoMo' },
+  { id: '4', date: daysAgo(5), description: 'Gloves, syringes, cotton', category: 'Supplies', amount: 85000, paidBy: 'Cash' },
+  { id: '5', date: daysAgo(6), description: 'Amoxicillin restock (200 units)', category: 'Drug Stock', amount: 140000, paidBy: 'Bank' },
+  { id: '6', date: daysAgo(8), description: 'Boda delivery of supplies', category: 'Transport', amount: 25000, paidBy: 'Cash' },
+  { id: '7', date: daysAgo(9), description: 'Generator servicing', category: 'Maintenance', amount: 90000, paidBy: 'Cash' },
+  { id: '8', date: lastMonthDay(28), description: 'Clinic rent (last month)', category: 'Rent', amount: 350000, paidBy: 'Cash' },
+  { id: '9', date: lastMonthDay(24), description: 'Salaries (last month)', category: 'Salaries', amount: 280000, paidBy: 'Bank' },
+  { id: '10', date: lastMonthDay(15), description: 'Water bill', category: 'Utilities', amount: 45000, paidBy: 'Cash' },
 ];
 
 const formatCurrency = (amount) => `UGX ${Number(amount).toLocaleString()}`;
@@ -40,10 +50,14 @@ export function ExpensesPage() {
   });
 
   const summary = useMemo(() => {
-    const byMonth = (m) =>
-      expenses
-        .filter((e) => new Date(e.date).getMonth() === m)
-        .reduce((sum, e) => sum + Number(e.amount || 0), 0);
+    const thisRef = new Date();
+    const lastRef = new Date(thisRef.getFullYear(), thisRef.getMonth() - 1, 1);
+    const inMonth = (dateStr, ref) => {
+      const d = new Date(dateStr);
+      return d.getMonth() === ref.getMonth() && d.getFullYear() === ref.getFullYear();
+    };
+    const totalIn = (ref) =>
+      expenses.filter((e) => inMonth(e.date, ref)).reduce((sum, e) => sum + Number(e.amount || 0), 0);
 
     const byCategory = expenses.reduce((acc, e) => {
       acc[e.category] = (acc[e.category] || 0) + Number(e.amount || 0);
@@ -53,8 +67,8 @@ export function ExpensesPage() {
 
     return {
       total: expenses.reduce((sum, e) => sum + Number(e.amount || 0), 0),
-      thisMonth: byMonth(3),
-      lastMonth: byMonth(2),
+      thisMonth: totalIn(thisRef),
+      lastMonth: totalIn(lastRef),
       topCategory: top ? top[0] : '—',
       topCategoryAmount: top ? top[1] : 0,
     };
