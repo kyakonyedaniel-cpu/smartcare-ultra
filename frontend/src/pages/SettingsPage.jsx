@@ -51,12 +51,98 @@ export function SettingsPage() {
     alert('Clinic information saved!');
   };
 
-  const handleExportData = () => {
-    alert('Exporting data...');
+  // Real client-side export of whatever this build holds. Replace with a server
+  // export once the backend is live.
+  const download = (filename, content, mime) => {
+    const blob = new Blob([content], { type: mime });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  const snapshot = () => ({
+    exportedAt: new Date().toISOString(),
+    clinic: clinicInfo,
+    workingHours,
+    notifications,
+  });
+
+  const handleExportCsv = () => {
+    const rows = [
+      ['Field', 'Value'],
+      ['Clinic name', clinicInfo.name],
+      ['Address', clinicInfo.address],
+      ['Phone', clinicInfo.phone],
+      ['Email', clinicInfo.email],
+      ['Working days', workingHours.days.join(' / ')],
+      ['Opening hours', `${workingHours.startTime} - ${workingHours.endTime}`],
+    ];
+    const csv = rows.map((r) => r.map((c) => `"${String(c).replace(/"/g, '""')}"`).join(',')).join('\n');
+    download(`clinic-export-${new Date().toISOString().slice(0, 10)}.csv`, csv, 'text/csv;charset=utf-8;');
+  };
+
+  const handleExportJson = () => {
+    download(
+      `clinic-backup-${new Date().toISOString().slice(0, 10)}.json`,
+      JSON.stringify(snapshot(), null, 2),
+      'application/json'
+    );
+  };
+
+  const handleExportPdf = () => {
+    const win = window.open('', '_blank');
+    if (!win) {
+      alert('Allow pop-ups for this site to export a PDF.');
+      return;
+    }
+    win.document.write(`
+      <html><head><title>${clinicInfo.name} - Export</title>
+      <style>body{font-family:Arial,sans-serif;padding:40px;color:#111}
+      h1{color:#2563eb;margin:0 0 4px}h2{margin:24px 0 8px;font-size:16px}
+      table{width:100%;border-collapse:collapse;margin-top:8px}
+      td,th{border:1px solid #e5e7eb;padding:8px;text-align:left;font-size:14px}
+      th{background:#f9fafb}</style></head><body>
+      <h1>${clinicInfo.name}</h1>
+      <p>${clinicInfo.address}<br/>${clinicInfo.phone} &middot; ${clinicInfo.email}</p>
+      <h2>Working hours</h2>
+      <table><tr><th>Days</th><td>${workingHours.days.join(', ')}</td></tr>
+      <tr><th>Hours</th><td>${workingHours.startTime} &ndash; ${workingHours.endTime}</td></tr></table>
+      <p style="margin-top:32px;font-size:12px;color:#6b7280">Exported ${new Date().toLocaleString()}</p>
+      </body></html>`);
+    win.document.close();
+    win.focus();
+    win.print();
   };
 
   const handleBackup = () => {
-    alert('Backup created!');
+    download(
+      `smartcare-backup-${new Date().toISOString().slice(0, 10)}.json`,
+      JSON.stringify(snapshot(), null, 2),
+      'application/json'
+    );
+  };
+
+  const handleRestore = (event) => {
+    const file = event.target.files?.[0];
+    event.target.value = '';
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      try {
+        const parsed = JSON.parse(String(reader.result));
+        const keys = Object.keys(parsed || {});
+        alert(
+          `Backup file read successfully (${keys.length} section${keys.length === 1 ? '' : 's'}: ${keys.join(', ')}).\n\n` +
+            'Restoring into the app needs the backend — nothing has been changed yet.'
+        );
+      } catch {
+        alert('That file is not a valid SmartCare backup.');
+      }
+    };
+    reader.readAsText(file);
   };
 
   return (
@@ -388,21 +474,21 @@ export function SettingsPage() {
                   <p className={cn("text-sm mb-4", textMuted)}>Download your clinic data in various formats</p>
                   <div className="flex flex-wrap gap-3">
                     <button
-                      onClick={handleExportData}
+                      onClick={handleExportCsv}
                       className={cn("flex items-center gap-2 px-4 py-2 rounded-lg border", isDark ? "border-slate-700 text-slate-300" : "border-gray-200 text-gray-700")}
                     >
                       <Download size={16} />
                       Export CSV
                     </button>
                     <button
-                      onClick={handleExportData}
+                      onClick={handleExportPdf}
                       className={cn("flex items-center gap-2 px-4 py-2 rounded-lg border", isDark ? "border-slate-700 text-slate-300" : "border-gray-200 text-gray-700")}
                     >
                       <Download size={16} />
                       Export PDF
                     </button>
                     <button
-                      onClick={handleExportData}
+                      onClick={handleExportJson}
                       className={cn("flex items-center gap-2 px-4 py-2 rounded-lg border", isDark ? "border-slate-700 text-slate-300" : "border-gray-200 text-gray-700")}
                     >
                       <Download size={16} />
@@ -422,13 +508,13 @@ export function SettingsPage() {
                       <Database size={16} />
                       Create Backup
                     </button>
-                    <button
-                      onClick={() => alert('Restore functionality')}
-                      className={cn("flex items-center gap-2 px-4 py-2 rounded-lg border", isDark ? "border-slate-700 text-slate-300" : "border-gray-200 text-gray-700")}
+                    <label
+                      className={cn("flex items-center gap-2 px-4 py-2 rounded-lg border cursor-pointer", isDark ? "border-slate-700 text-slate-300" : "border-gray-200 text-gray-700")}
                     >
                       <Upload size={16} />
                       Restore
-                    </button>
+                      <input type="file" accept="application/json,.json" onChange={handleRestore} className="hidden" />
+                    </label>
                   </div>
                 </div>
 
