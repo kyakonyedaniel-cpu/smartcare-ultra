@@ -46,15 +46,11 @@ const features = [
   { icon: BarChart3, title: 'Smart Reports', description: 'Generate insightful reports on revenue, patients, and inventory.' },
   { icon: CreditCard, title: 'Easy Payments', description: 'Accept MTN MoMo and Airtel Money payments seamlessly.' },
   { icon: Shield, title: 'Secure & Private', description: 'Your data is encrypted and protected with enterprise-grade security.' },
-  { icon: Zap, title: 'Fast & Reliable', description: 'Lightning-fast performance with 99.9% uptime guarantee.' },
+  { icon: Zap, title: 'Fast & Reliable', description: 'Runs in the browser and feels quick even on modest hardware.' },
   { icon: Building2, title: 'Multi-Branch', description: 'Manage multiple clinic branches from a single dashboard.' },
 ];
 
-const testimonials = [
-  { name: 'Dr. Sarah Nakato', role: 'Owner, Nakato Clinic', content: 'SmartCare transformed how we manage our clinic. Patient records are now at our fingertips!', avatar: 'SN' },
-  { name: 'James Mukasa', role: 'Manager, Health Plus', content: 'The billing and payment integration with MTN MoMo has increased our collection rate by 40%.', avatar: 'JM' },
-  { name: 'Grace Nabisere', role: 'Pharmacist, City Pharmacy', content: 'Inventory management has never been easier. We always know what stock we have.', avatar: 'GN' },
-];
+// No customer testimonials until we have real, consenting customers.
 
 export function LandingPage() {
   const [email, setEmail] = useState('');
@@ -82,7 +78,7 @@ export function LandingPage() {
             <div className="hidden md:flex items-center gap-8">
               <a href="#features" className="text-gray-600 hover:text-gray-900">Features</a>
               <a href="#pricing" className="text-gray-600 hover:text-gray-900">Pricing</a>
-              <a href="#testimonials" className="text-gray-600 hover:text-gray-900">Testimonials</a>
+              <a href="#early-access" className="text-gray-600 hover:text-gray-900">Why us</a>
               <a href="#contact" className="text-gray-600 hover:text-gray-900">Contact</a>
             </div>
             <div className="flex items-center gap-4">
@@ -99,7 +95,7 @@ export function LandingPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-4xl mx-auto">
             <span className="inline-block px-4 py-1 bg-blue-100 text-blue-700 rounded-full text-sm font-medium mb-4">
-              #1 Clinic Management in Uganda
+              Built in Uganda · Early Access
             </span>
             <h1 className="text-5xl md:text-6xl font-bold text-gray-900 leading-tight">
               Run Your Clinic
@@ -107,36 +103,36 @@ export function LandingPage() {
               Not Harder
             </h1>
             <p className="mt-6 text-xl text-gray-600 max-w-2xl mx-auto">
-              The all-in-one clinic management platform trusted by 150+ healthcare providers in Uganda. 
-              Manage patients, billing, inventory, and more - all in one place.
+              A clinic and pharmacy management platform built for Ugandan clinics. Patients, stock,
+              billing and reports, all in one place.
             </p>
             <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
-              <Link to="/register" className="px-8 py-4 bg-blue-600 text-white text-lg font-semibold rounded-lg hover:bg-blue-700 flex items-center justify-center gap-2">
-                Start Free Trial <ArrowRight size={20} />
+              <Link to="/login" replace className="px-8 py-4 bg-blue-600 text-white text-lg font-semibold rounded-lg hover:bg-blue-700 flex items-center justify-center gap-2">
+                Try the Demo <ArrowRight size={20} />
               </Link>
               <a href="#demo" className="px-8 py-4 bg-white text-gray-900 text-lg font-semibold rounded-lg border hover:bg-gray-50">
                 Watch Demo
               </a>
             </div>
-            <p className="mt-4 text-sm text-gray-500">No credit card required • 14-day free trial</p>
+            <p className="mt-4 text-sm text-gray-500">Demo build — runs on sample data, nothing is saved yet</p>
           </div>
 
           <div className="mt-20 grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
             <div>
-              <p className="text-4xl font-bold text-blue-600">150+</p>
-              <p className="text-gray-600">Clinics</p>
+              <p className="text-2xl font-bold text-blue-600">Multi-branch</p>
+              <p className="text-gray-600">Clinic setup</p>
             </div>
             <div>
-              <p className="text-4xl font-bold text-blue-600">45K+</p>
-              <p className="text-gray-600">Patients</p>
+              <p className="text-2xl font-bold text-blue-600">MoMo-ready</p>
+              <p className="text-gray-600">Mobile payments</p>
             </div>
             <div>
-              <p className="text-4xl font-bold text-blue-600">UGX 2B+</p>
-              <p className="text-gray-600">Processed</p>
+              <p className="text-2xl font-bold text-blue-600">Role-based</p>
+              <p className="text-gray-600">Access control</p>
             </div>
             <div>
-              <p className="text-4xl font-bold text-blue-600">99.9%</p>
-              <p className="text-gray-600">Uptime</p>
+              <p className="text-2xl font-bold text-blue-600">SMS</p>
+              <p className="text-gray-600">Patient reminders</p>
             </div>
           </div>
         </div>
@@ -209,30 +205,24 @@ export function LandingPage() {
         </div>
       </section>
 
-      <section id="testimonials" className="py-20 bg-blue-600">
+      <section id="early-access" className="py-20 bg-blue-600">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-white">Loved by Healthcare Providers</h2>
-            <p className="mt-4 text-xl text-blue-100">See what clinic owners are saying about SmartCare</p>
+          <div className="text-center mb-10">
+            <h2 className="text-3xl md:text-4xl font-bold text-white">Built in Uganda, for Ugandan clinics</h2>
+            <p className="mt-4 text-xl text-blue-100 max-w-2xl mx-auto">
+              SmartCare Ultra is in early access. We are onboarding our first clinics and working
+              closely with them before we publish customer stories.
+            </p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {testimonials.map((testimonial, index) => (
-              <div key={index} className="bg-white rounded-xl p-6">
-                <div className="flex gap-1 mb-4">
-                  {[...Array(5)].map((_, i) => (
-                    <Star key={i} size={18} className="text-yellow-400 fill-yellow-400" />
-                  ))}
-                </div>
-                <p className="text-gray-600">"{testimonial.content}"</p>
-                <div className="mt-6 flex items-center gap-3">
-                  <div className="h-10 w-10 bg-blue-100 rounded-full flex items-center justify-center font-bold text-blue-600">
-                    {testimonial.avatar}
-                  </div>
-                  <div>
-                    <p className="font-semibold">{testimonial.name}</p>
-                    <p className="text-sm text-gray-500">{testimonial.role}</p>
-                  </div>
-                </div>
+            {[
+              { title: 'Ugandan pricing', body: 'Plans priced in shillings, from UGX 99,000 a month.' },
+              { title: 'Low-bandwidth friendly', body: 'Designed for the phones and connections clinics actually use.' },
+              { title: 'Your data, your call', body: 'Export patients, invoices and stock to CSV, PDF or JSON at any time.' },
+            ].map((item) => (
+              <div key={item.title} className="bg-white rounded-xl p-6">
+                <h3 className="font-semibold text-gray-900">{item.title}</h3>
+                <p className="mt-2 text-gray-600">{item.body}</p>
               </div>
             ))}
           </div>

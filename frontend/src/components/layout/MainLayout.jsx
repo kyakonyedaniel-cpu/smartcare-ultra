@@ -27,6 +27,15 @@ export function MainLayout({ children }) {
           isDark ? "bg-slate-950 text-white" : "bg-gray-50 text-gray-900"
         )}>
           <div className="max-w-screen-2xl mx-auto">
+            <div className={cn(
+              "mb-4 rounded-xl border px-4 py-3 text-sm flex items-start gap-2",
+              isDark
+                ? "border-amber-500/40 bg-amber-500/10 text-amber-200"
+                : "border-amber-300 bg-amber-50 text-amber-900"
+            )}>
+              <span className="font-semibold whitespace-nowrap">Demo mode.</span>
+              <span>This build runs on sample data — nothing you enter is saved.</span>
+            </div>
             {children}
           </div>
         </main>
